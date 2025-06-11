@@ -4,29 +4,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Word Weasel - The Game</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cherry+Swash:wght@400;700&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-gradient: linear-gradient(135deg, #B2D8CE 0%, #a0c9bf 100%);
-            --secondary-gradient: linear-gradient(135deg, #B2D8CE 0%, #a0c9bf 100%);
-            --background-gradient: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);
+            /* Unified Color Palette */
+            --primary-color: #2D5A87;
+            --primary-light: #4A7BA7;
+            --primary-dark: #1C3A5F;
+            --secondary-color: #E67E22;
+            --secondary-light: #F39C12;
+            --secondary-dark: #D35400;
+            --accent-color: #27AE60;
+            --accent-light: #2ECC71;
+            --accent-dark: #1E8449;
+            --warning-color: #E74C3C;
+            --warning-light: #EC7063;
+            --warning-dark: #C0392B;
+            --neutral-100: #FFFFFF;
+            --neutral-200: #F8F9FA;
+            --neutral-300: #E9ECEF;
+            --neutral-400: #DEE2E6;
+            --neutral-500: #ADB5BD;
+            --neutral-600: #6C757D;
+            --neutral-700: #495057;
+            --neutral-800: #343A40;
+            --neutral-900: #212529;
+            
+            /* Gradients */
+            --primary-gradient: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            --secondary-gradient: linear-gradient(135deg, var(--secondary-color) 0%, var(--secondary-light) 100%);
+            --accent-gradient: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-light) 100%);
+            --warning-gradient: linear-gradient(135deg, var(--warning-color) 0%, var(--warning-light) 100%);
+            --background-gradient: linear-gradient(135deg, var(--neutral-200) 0%, var(--neutral-300) 50%, var(--neutral-400) 100%);
+            
+            /* Component Colors */
+            --text-primary: var(--neutral-900);
+            --text-secondary: var(--neutral-700);
+            --text-muted: var(--neutral-600);
+            --text-on-primary: var(--neutral-100);
+            --text-on-secondary: var(--neutral-100);
+            --text-on-accent: var(--neutral-100);
+            --text-on-warning: var(--neutral-100);
+            
             --card-bg: rgba(255, 255, 255, 0.95);
-            --card-border: rgba(148, 163, 184, 0.3);
-            --text-primary: #1e293b;
-            --text-secondary: #475569;
-            --text-muted: #64748b;
-            --accent-color: #f59e0b;
-            --accent-glow: rgba(245, 158, 11, 0.4);
-            --success-color: #10b981;
-            --success-glow: rgba(16, 185, 129, 0.4);
-            --error-color: #ef4444;
-            --error-glow: rgba(239, 68, 68, 0.4);
-            --warning-color: #f97316;
-            --warning-glow: rgba(249, 115, 22, 0.4);
-            --shadow-light: 0 4px 16px rgba(0, 0, 0, 0.08);
-            --shadow-heavy: 0 8px 32px rgba(0, 0, 0, 0.12);
+            --card-border: rgba(173, 181, 189, 0.3);
+            --card-shadow: 0 4px 16px rgba(33, 37, 41, 0.1);
+            --card-shadow-hover: 0 8px 32px rgba(33, 37, 41, 0.15);
+            
+            /* Spacing & Layout */
             --border-radius: 16px;
             --border-radius-sm: 12px;
+            --border-radius-xs: 8px;
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             --spacing-xs: 8px;
             --spacing-sm: 12px;
@@ -43,12 +71,14 @@
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-weight: 400;
             background: var(--background-gradient);
             color: var(--text-primary);
             min-height: 100vh;
             padding: var(--spacing-lg);
             overflow-x: hidden;
+            line-height: 1.6;
         }
 
         body::before {
@@ -58,9 +88,9 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle at 20% 80%, rgba(178, 216, 206, 0.1) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 20%, rgba(245, 158, 11, 0.08) 0%, transparent 50%),
-                        radial-gradient(circle at 40% 40%, rgba(16, 185, 129, 0.05) 0%, transparent 50%);
+            background: radial-gradient(circle at 20% 80%, rgba(45, 90, 135, 0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(230, 126, 34, 0.06) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 40%, rgba(39, 174, 96, 0.04) 0%, transparent 50%);
             pointer-events: none;
             z-index: -1;
         }
@@ -72,7 +102,7 @@
             background: var(--card-bg);
             border: 1px solid var(--card-border);
             border-radius: var(--border-radius);
-            box-shadow: var(--shadow-heavy);
+            box-shadow: var(--card-shadow-hover);
             overflow: hidden;
         }
 
@@ -90,25 +120,44 @@
             left: 0;
             right: 0;
             height: 2px;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
         }
 
         header h1 {
+            font-family: 'Cherry Swash', cursive;
             font-size: 2.5rem;
             font-weight: 700;
             margin-bottom: var(--spacing-xs);
-            color: white;
+            color: var(--text-on-primary);
             text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
         }
 
         header p {
             font-size: 1.1rem;
-            color: rgba(255, 255, 255, 0.9);
-            font-weight: 400;
+            color: var(--text-on-primary);
+            font-weight: 300;
+            opacity: 0.9;
         }
 
         main {
             padding: var(--spacing-xl) var(--spacing-lg);
+        }
+
+        /* Typography */
+        h1, h2, h3 {
+            font-family: 'Cherry Swash', cursive;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            margin-bottom: var(--spacing-md);
+        }
+
+        h3 {
+            font-size: 1.4rem;
+            margin-bottom: var(--spacing-sm);
         }
 
         .screen {
@@ -125,7 +174,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* --- Modern Components --- */
+        /* Modern Components */
         .card {
             background: var(--card-bg);
             backdrop-filter: blur(12px);
@@ -133,13 +182,13 @@
             padding: var(--spacing-xl);
             border-radius: var(--border-radius);
             margin-bottom: var(--spacing-lg);
-            box-shadow: var(--shadow-light);
+            box-shadow: var(--card-shadow);
             transition: var(--transition);
         }
 
         .card:hover {
             transform: translateY(-2px);
-            box-shadow: var(--shadow-heavy);
+            box-shadow: var(--card-shadow-hover);
         }
 
         .btn {
@@ -147,7 +196,8 @@
             align-items: center;
             justify-content: center;
             background: var(--primary-gradient);
-            color: white;
+            color: var(--text-on-primary);
+            font-family: 'Nunito', sans-serif;
             font-weight: 600;
             font-size: 1rem;
             padding: var(--spacing-md) var(--spacing-xl);
@@ -159,7 +209,7 @@
             margin-top: var(--spacing-md);
             position: relative;
             overflow: hidden;
-            box-shadow: 0 4px 16px rgba(178, 216, 206, 0.3);
+            box-shadow: 0 4px 16px rgba(45, 90, 135, 0.25);
         }
 
         .btn::before {
@@ -169,7 +219,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
             transition: left 0.5s;
         }
 
@@ -179,7 +229,8 @@
 
         .btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 24px rgba(178, 216, 206, 0.4);
+            box-shadow: 0 8px 24px rgba(45, 90, 135, 0.35);
+            background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary-color) 100%);
         }
 
         .btn:active {
@@ -188,21 +239,32 @@
         
         .btn-secondary {
             background: var(--secondary-gradient);
-            box-shadow: 0 4px 16px rgba(178, 216, 206, 0.3);
+            box-shadow: 0 4px 16px rgba(230, 126, 34, 0.25);
         }
 
         .btn-secondary:hover {
-            box-shadow: 0 8px 24px rgba(178, 216, 206, 0.4);
+            box-shadow: 0 8px 24px rgba(230, 126, 34, 0.35);
+            background: linear-gradient(135deg, var(--secondary-light) 0%, var(--secondary-color) 100%);
         }
 
         .btn-success {
-            background: linear-gradient(135deg, var(--success-color) 0%, #059669 100%);
-            box-shadow: 0 4px 16px var(--success-glow);
+            background: var(--accent-gradient);
+            box-shadow: 0 4px 16px rgba(39, 174, 96, 0.25);
+        }
+
+        .btn-success:hover {
+            box-shadow: 0 8px 24px rgba(39, 174, 96, 0.35);
+            background: linear-gradient(135deg, var(--accent-light) 0%, var(--accent-color) 100%);
         }
 
         .btn-danger {
-            background: linear-gradient(135deg, var(--error-color) 0%, #dc2626 100%);
-            box-shadow: 0 4px 16px var(--error-glow);
+            background: var(--warning-gradient);
+            box-shadow: 0 4px 16px rgba(231, 76, 60, 0.25);
+        }
+
+        .btn-danger:hover {
+            box-shadow: 0 8px 24px rgba(231, 76, 60, 0.35);
+            background: linear-gradient(135deg, var(--warning-light) 0%, var(--warning-color) 100%);
         }
 
         input[type="text"], input[type="number"] {
@@ -211,17 +273,18 @@
             margin-bottom: var(--spacing-md);
             border-radius: var(--border-radius-sm);
             border: 2px solid var(--card-border);
-            background: white;
+            background: var(--neutral-100);
             color: var(--text-primary);
             font-size: 1rem;
-            font-family: inherit;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 400;
             transition: var(--transition);
         }
 
         input:focus {
             outline: none;
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 3px var(--accent-glow);
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(45, 90, 135, 0.15);
         }
 
         input::placeholder {
@@ -238,7 +301,7 @@
             margin: 0;
         }
         
-        /* --- Enhanced Player Setup --- */
+        /* Enhanced Player Setup */
         #player-inputs {
             margin: var(--spacing-lg) 0;
         }
@@ -256,28 +319,25 @@
             opacity: 0.7;
         }
 
-        /* --- Modern Game Screen --- */
+        /* Modern Game Screen */
         #game-info-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: var(--spacing-lg) var(--spacing-lg);
+            padding: var(--spacing-lg);
             background: var(--card-bg);
             backdrop-filter: blur(12px);
             border: 1px solid var(--card-border);
             border-radius: var(--border-radius);
             margin-bottom: var(--spacing-lg);
-            box-shadow: var(--shadow-light);
+            box-shadow: var(--card-shadow);
         }
 
         #round-counter {
-            font-weight: 600;
-            font-size: 1.1rem;
-            color: var(--accent-color);
-            background: linear-gradient(135deg, var(--accent-color), var(--warning-color));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            font-family: 'Cherry Swash', cursive;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--secondary-color);
         }
 
         #player-scores {
@@ -290,31 +350,33 @@
         #player-scores li {
             font-weight: 500;
             padding: var(--spacing-xs) var(--spacing-md);
-            background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+            background: linear-gradient(135deg, var(--neutral-200), var(--neutral-300));
             border-radius: 20px;
             border: 1px solid var(--card-border);
             transition: var(--transition);
             color: var(--text-primary);
+            font-size: 0.9rem;
         }
 
         #player-scores li:hover {
-            background: linear-gradient(135deg, #e2e8f0, #cbd5e1);
+            background: linear-gradient(135deg, var(--neutral-300), var(--neutral-400));
             transform: translateY(-1px);
         }
         
         #player-scores .weasel-score {
-            background: linear-gradient(135deg, var(--error-color), #dc2626);
-            color: white;
-            box-shadow: 0 0 12px var(--error-glow);
+            background: var(--warning-gradient);
+            color: var(--text-on-warning);
+            box-shadow: 0 0 12px rgba(231, 76, 60, 0.3);
             animation: pulse 2s infinite;
+            font-weight: 600;
         }
 
         @keyframes pulse {
             0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
+            50% { opacity: 0.85; }
         }
 
-        /* --- Enhanced Word Grid --- */
+        /* Enhanced Word Grid */
         #word-grid, #main-word-grid, #reveal-word-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -323,7 +385,7 @@
         }
 
         .word-cell {
-            background: white;
+            background: var(--neutral-100);
             padding: var(--spacing-lg) var(--spacing-sm);
             border-radius: var(--border-radius-sm);
             text-align: center;
@@ -334,6 +396,7 @@
             position: relative;
             overflow: hidden;
             color: var(--text-primary);
+            cursor: default;
         }
 
         .word-cell::before {
@@ -343,29 +406,32 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(178, 216, 206, 0.1), transparent);
+            background: linear-gradient(90deg, transparent, rgba(45, 90, 135, 0.08), transparent);
             transition: left 0.5s;
         }
 
         .word-cell.secret {
-            background: linear-gradient(135deg, var(--accent-color), var(--warning-color));
-            color: white;
+            background: var(--secondary-gradient);
+            color: var(--text-on-secondary);
             font-weight: 700;
-            box-shadow: 0 0 24px var(--accent-glow);
-            border-color: var(--accent-color);
+            box-shadow: 0 0 24px rgba(230, 126, 34, 0.4);
+            border-color: var(--secondary-color);
             animation: secretGlow 3s ease-in-out infinite;
         }
 
         @keyframes secretGlow {
-            0%, 100% { box-shadow: 0 4px 24px var(--accent-glow); }
-            50% { box-shadow: 0 8px 32px var(--accent-glow), 0 0 48px rgba(245, 158, 11, 0.2); }
+            0%, 100% { box-shadow: 0 4px 24px rgba(230, 126, 34, 0.4); }
+            50% { box-shadow: 0 8px 32px rgba(230, 126, 34, 0.6), 0 0 48px rgba(230, 126, 34, 0.2); }
         }
         
-        .word-cell.guessable:hover {
+        .word-cell.guessable {
             cursor: pointer;
-            border-color: var(--accent-color);
+        }
+
+        .word-cell.guessable:hover {
+            border-color: var(--primary-color);
             transform: translateY(-4px) scale(1.02);
-            box-shadow: 0 8px 24px rgba(245, 158, 11, 0.2);
+            box-shadow: 0 8px 24px rgba(45, 90, 135, 0.2);
         }
 
         .word-cell.guessable:hover::before {
@@ -373,10 +439,10 @@
         }
 
         .word-cell.selected-guess {
-            border-color: var(--success-color);
-            background: linear-gradient(135deg, var(--success-color), #059669);
-            color: white;
-            box-shadow: 0 0 24px var(--success-glow);
+            border-color: var(--accent-color);
+            background: var(--accent-gradient);
+            color: var(--text-on-accent);
+            box-shadow: 0 0 24px rgba(39, 174, 96, 0.4);
             font-weight: 700;
         }
         
@@ -386,29 +452,7 @@
             }
         }
 
-        /* --- Enhanced Phase Screens --- */
-        .phase-header {
-            text-align: center;
-            margin-bottom: var(--spacing-lg);
-        }
-
-        .phase-header h2 {
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin-bottom: var(--spacing-xs);
-            background: var(--primary-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .phase-header p {
-            color: var(--text-secondary);
-            font-size: 1.1rem;
-            line-height: 1.6;
-        }
-
-        /* --- Modern Vote Options --- */
+        /* Vote Options */
         #vote-options {
             list-style: none;
             margin-top: var(--spacing-lg);
@@ -417,7 +461,7 @@
         }
         
         .vote-option {
-            background: white;
+            background: var(--neutral-100);
             padding: var(--spacing-lg);
             border-radius: var(--border-radius-sm);
             cursor: pointer;
@@ -436,14 +480,14 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(178, 216, 206, 0.1), transparent);
+            background: linear-gradient(90deg, transparent, rgba(45, 90, 135, 0.08), transparent);
             transition: left 0.5s;
         }
 
         .vote-option:hover {
             transform: translateX(4px);
-            border-color: var(--accent-color);
-            box-shadow: 0 4px 16px rgba(245, 158, 11, 0.2);
+            border-color: var(--primary-color);
+            box-shadow: 0 4px 16px rgba(45, 90, 135, 0.15);
         }
 
         .vote-option:hover::before {
@@ -451,14 +495,14 @@
         }
 
         .vote-option.selected-vote {
-            background: linear-gradient(135deg, var(--accent-color), var(--warning-color));
-            color: white;
-            border-color: var(--accent-color);
-            box-shadow: 0 0 24px var(--accent-glow);
+            background: var(--primary-gradient);
+            color: var(--text-on-primary);
+            border-color: var(--primary-color);
+            box-shadow: 0 0 24px rgba(45, 90, 135, 0.3);
             font-weight: 700;
         }
 
-        /* --- Enhanced Scoring Summary --- */
+        /* Scoring Summary */
         #scoring-summary {
             text-align: left;
         }
@@ -467,10 +511,10 @@
             text-align: center;
             margin-bottom: var(--spacing-lg);
             font-size: 1.6rem;
-            color: var(--text-primary);
         }
 
         .outcome-title {
+            font-family: 'Cherry Swash', cursive;
             font-weight: 700;
             font-size: 1.4rem;
             text-align: center;
@@ -480,30 +524,30 @@
         }
 
         .innocent-win { 
-            background: linear-gradient(135deg, var(--success-color), #059669);
-            color: white;
-            box-shadow: 0 0 32px var(--success-glow);
+            background: var(--accent-gradient);
+            color: var(--text-on-accent);
+            box-shadow: 0 0 32px rgba(39, 174, 96, 0.3);
         }
         .weasel-win { 
-            background: linear-gradient(135deg, var(--error-color), #dc2626);
-            color: white;
-            box-shadow: 0 0 32px var(--error-glow);
+            background: var(--warning-gradient);
+            color: var(--text-on-warning);
+            box-shadow: 0 0 32px rgba(231, 76, 60, 0.3);
         }
         .contested-win { 
-            background: linear-gradient(135deg, var(--warning-color), #ea580c);
-            color: white;
-            box-shadow: 0 0 32px var(--warning-glow);
+            background: var(--secondary-gradient);
+            color: var(--text-on-secondary);
+            box-shadow: 0 0 32px rgba(230, 126, 34, 0.3);
         }
         .total-failure { 
-            background: linear-gradient(135deg, #64748b, #475569);
-            color: white;
-            box-shadow: 0 0 32px rgba(100, 116, 139, 0.3);
+            background: linear-gradient(135deg, var(--neutral-600), var(--neutral-700));
+            color: var(--neutral-100);
+            box-shadow: 0 0 32px rgba(108, 117, 125, 0.3);
         }
         
         #player-score-changes {
             list-style: none;
             margin-top: var(--spacing-lg);
-            background: white;
+            background: var(--neutral-100);
             border-radius: var(--border-radius-sm);
             border: 1px solid var(--card-border);
             overflow: hidden;
@@ -523,19 +567,19 @@
         }
 
         #player-score-changes li:hover {
-            background: #f8fafc;
+            background: var(--neutral-200);
         }
 
         .score-gain { 
-            color: var(--success-color);
+            color: var(--accent-color);
             font-weight: 700;
         }
         .score-loss { 
-            color: var(--error-color); 
+            color: var(--warning-color); 
             font-weight: 700;
         }
         
-        /* --- Enhanced Rules Section --- */
+        /* Rules Section */
         #rules-container {
             margin-top: var(--spacing-2xl);
         }
@@ -543,10 +587,11 @@
         #rules-container summary {
             cursor: pointer;
             padding: var(--spacing-lg);
-            background: white;
+            background: var(--neutral-100);
             border: 2px solid var(--card-border);
             border-radius: var(--border-radius);
-            font-weight: 600;
+            font-family: 'Cherry Swash', cursive;
+            font-weight: 700;
             font-size: 1.1rem;
             outline: none;
             transition: var(--transition);
@@ -555,8 +600,8 @@
         }
 
         #rules-container summary:hover {
-            background: #f8fafc;
-            border-color: var(--accent-color);
+            background: var(--neutral-200);
+            border-color: var(--primary-color);
             transform: translateY(-2px);
         }
 
@@ -567,7 +612,7 @@
         }
 
         #rules-content {
-            background: white;
+            background: var(--neutral-100);
             padding: var(--spacing-lg);
             border: 2px solid var(--card-border);
             border-top: none;
@@ -579,10 +624,10 @@
         }
 
         #rules-content h3 {
-            color: var(--accent-color);
+            color: var(--primary-color);
             margin-top: var(--spacing-lg);
             margin-bottom: var(--spacing-xs);
-            font-weight: 600;
+            font-weight: 700;
         }
 
         #rules-content ul, #rules-content ol {
@@ -595,11 +640,66 @@
         }
 
         #rules-content strong {
-            color: var(--warning-color);
-            font-weight: 600;
+            color: var(--secondary-color);
+            font-weight: 700;
         }
 
-        /* --- Responsive Design --- */
+        /* Buffer and Special Screens */
+        .buffer-screen {
+            text-align: center;
+        }
+        
+        .buffer-screen h2 {
+            margin-bottom: var(--spacing-md);
+            color: var(--text-secondary);
+        }
+        
+        .buffer-screen p {
+            color: var(--text-muted);
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        #weasel-guess-screen .card {
+            text-align: center;
+        }
+        
+        #weasel-guess-screen h2 {
+            margin-bottom: var(--spacing-md);
+            color: var(--warning-color);
+        }
+        
+        #weasel-guess-screen p {
+            margin-bottom: var(--spacing-lg);
+            color: var(--text-secondary);
+        }
+
+        /* Additional Elements */
+        label {
+            display: block;
+            margin-bottom: var(--spacing-sm);
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        p {
+            margin-bottom: var(--spacing-sm);
+            line-height: 1.6;
+        }
+
+        hr {
+            margin: var(--spacing-md) 0;
+            border: none;
+            border-top: 1px solid var(--card-border);
+        }
+
+        #main-word-grid-container h3 {
+            margin-bottom: var(--spacing-sm);
+            text-align: center;
+            color: var(--text-secondary);
+            font-family: 'Cherry Swash', cursive;
+        }
+
+        /* Responsive Design */
         @media (max-width: 768px) {
             body {
                 padding: var(--spacing-md);
@@ -637,21 +737,9 @@
                 font-size: 0.85rem;
                 padding: var(--spacing-md) var(--spacing-xs);
             }
-
-            #rules-container {
-                margin-top: var(--spacing-xl);
-            }
-
-            #rules-container summary {
-                padding: var(--spacing-md);
-            }
-
-            #rules-content {
-                padding: var(--spacing-md);
-            }
         }
 
-        /* --- Accessibility & Polish --- */
+        /* Accessibility */
         @media (prefers-reduced-motion: reduce) {
             *, *::before, *::after {
                 animation-duration: 0.01ms !important;
@@ -660,100 +748,9 @@
             }
         }
 
-        /* Focus styles for accessibility */
         *:focus-visible {
-            outline: 2px solid var(--accent-color);
+            outline: 2px solid var(--primary-color);
             outline-offset: 2px;
-        }
-
-        /* Loading states */
-        .loading {
-            opacity: 0.6;
-            pointer-events: none;
-            position: relative;
-        }
-
-        .loading::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 20px;
-            height: 20px;
-            margin: -10px 0 0 -10px;
-            border: 2px solid var(--accent-color);
-            border-top-color: transparent;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
-        /* --- Buffer Screen --- */
-        .buffer-screen {
-            text-align: center;
-        }
-        
-        .buffer-screen h2 {
-            margin-bottom: var(--spacing-md);
-            color: var(--text-secondary);
-        }
-        
-        .buffer-screen p {
-            color: var(--text-muted);
-            margin-bottom: var(--spacing-lg);
-        }
-        
-        /* --- Weasel Guess Screen --- */
-        #weasel-guess-screen .card {
-            text-align: center;
-        }
-        
-        #weasel-guess-screen h2 {
-            margin-bottom: var(--spacing-md);
-            color: var(--error-color);
-        }
-        
-        #weasel-guess-screen p {
-            margin-bottom: var(--spacing-lg);
-            color: var(--text-secondary);
-        }
-
-        /* --- Additional spacing refinements --- */
-        label {
-            display: block;
-            margin-bottom: var(--spacing-sm);
-            font-weight: 500;
-            color: var(--text-primary);
-        }
-
-        h2 {
-            margin-bottom: var(--spacing-md);
-            color: var(--text-primary);
-        }
-
-        h3 {
-            margin-bottom: var(--spacing-sm);
-            color: var(--text-primary);
-        }
-
-        p {
-            margin-bottom: var(--spacing-sm);
-            line-height: 1.6;
-        }
-
-        hr {
-            margin: var(--spacing-md) 0;
-            border: none;
-            border-top: 1px solid var(--card-border);
-        }
-
-        #main-word-grid-container h3 {
-            margin-bottom: var(--spacing-sm);
-            text-align: center;
-            color: var(--text-secondary);
         }
     </style>
 </head>
@@ -817,8 +814,8 @@
                      <!-- Buffer Screen -->
                     <div id="buffer-screen" class="screen">
                         <div class="card buffer-screen">
-                            <h2>🔄 Switching Players</h2>
-                            <p>Please pass the device to the next player and ensure the previous player looks away.</p>
+                            <h2>🔄 Pass to ${nextPlayer.name}</h2>
+                            <p>Please hand the device to ${nextPlayer.name} and ensure the previous player looks away.</p>
                             <button id="continue-buffer-btn" class="btn">Ready - Continue</button>
                         </div>
                     </div>
@@ -829,7 +826,17 @@
                             <div id="vote-results-content">
                                 <!-- Content generated by JS -->
                             </div>
-                            <button id="continue-after-votes-btn" class="btn">Continue</button>
+                            <button id="continue-after-votes-btn" class="btn">Reveal the Weasel!</button>
+                        </div>
+                    </div>
+                    <!-- Weasel Reveal Screen -->
+                    <div id="weasel-reveal-screen" class="screen">
+                        <div class="card">
+                            <h2>🎭 The Moment of Truth</h2>
+                            <div id="weasel-reveal-content">
+                                <!-- Content generated by JS -->
+                            </div>
+                            <button id="continue-to-guess-btn" class="btn">Continue to Weasel's Guess</button>
                         </div>
                     </div>
                     <!-- Weasel Guess Screen -->
@@ -865,31 +872,31 @@
                     <summary>Show/Hide Full Game Rules</summary>
                     <div id="rules-content">
                         <h3>1. Game Overview</h3>
-                        <p>In Word Weasel, players are divided into two secret teams each round: the <strong>Innocents</strong>, who know a secret word, and a single <strong>Weasel</strong>, who is left in the dark. The goal is to be the first to 100 points.</p>
+                        <p>In Word Weasel, players are divided into two secret teams each round: the <strong>Owls</strong>, who know a secret word, and a single <strong>Weasel</strong>, who is left in the dark. The goal is to be the first to 100 twigs.</p>
                         <ul>
                             <li><strong>Players:</strong> 4+</li>
-                            <li><strong>Roles:</strong> 1 Weasel, rest Innocents</li>
-                            <li><strong>Starting Points:</strong> 50 per player</li>
-                            <li><strong>Bet Range:</strong> 5–25 points</li>
+                            <li><strong>Roles:</strong> 1 Weasel, rest Owls</li>
+                            <li><strong>Starting Twigs:</strong> 50 per player</li>
+                            <li><strong>Bet Range:</strong> 5–25 twigs</li>
                         </ul>
                         <h3>2. The Flow of a Round</h3>
                         <ol>
-                            <li><strong>The Word Grid Reveal (Pass the Phone):</strong> The app privately shows each player the 3x6 Word Grid. Innocents see the Secret Word highlighted; the Weasel does not.</li>
+                            <li><strong>The Word Grid Reveal (Pass the Phone):</strong> The app privately shows each player the 3x6 Word Grid. Owls see the Secret Word highlighted; the Weasel does not.</li>
                             <li><strong>Broad Clue Round (Verbal):</strong> Each player gives a single-word or short-phrase clue out loud.</li>
-                            <li><strong>The Wager:</strong> All players secretly bet points. Innocents bet on catching the Weasel. The Weasel bets on guessing the word.</li>
+                            <li><strong>The Wager:</strong> All players secretly bet twigs. Owls bet on catching the Weasel. The Weasel bets on guessing the word.</li>
                             <li><strong>Specific Clue Round (Verbal):</strong> Each player gives a second, more specific clue out loud.</li>
                             <li><strong>The Verdict:</strong> All players vote on who the Weasel is. The Weasel secretly guesses the word from the grid.</li>
                         </ol>
                         <h3>3. Scoring: The Interdependent Payout</h3>
-                        <p>Payouts depend on two things: Did the Innocents catch the Weasel? (<strong>Catch Success</strong>) And did the Weasel guess the word? (<strong>Guess Success</strong>). A <strong>2x Sabotage Bonus</strong> is applied if your team succeeds AND the other team fails.</p>
+                        <p>Payouts depend on two things: Did the Owls catch the Weasel? (<strong>Catch Success</strong>) And did the Weasel guess the word? (<strong>Guess Success</strong>). A <strong>2x Sabotage Bonus</strong> is applied if your team succeeds AND the other team fails.</p>
                         <ul>
-                            <li><strong>Scenario 1: Decisive Innocent Victory (Catch Success, Guess Failure)</strong><br>Innocents win their bets x2. Weasel loses (Catch Pot x2) + their own bet.</li>
-                            <li><strong>Scenario 2: Masterful Weasel Victory (Catch Failure, Guess Success)</strong><br>Weasel wins (their bet x2) + the entire Catch Pot. Innocents lose their bets and must pay the Weasel's winnings.</li>
-                            <li><strong>Scenario 3: A Contested Outcome (Catch Success, Guess Success)</strong><br>Bonuses are cancelled. Innocents win the Catch Pot (get their bets back). Weasel wins the Guess Pot (gets their bet back). Points are transferred between teams.</li>
+                            <li><strong>Scenario 1: Decisive Owl Victory (Catch Success, Guess Failure)</strong><br>Owls win their bets x2. Weasel loses (Catch Pot x2) + their own bet.</li>
+                            <li><strong>Scenario 2: Masterful Weasel Victory (Catch Failure, Guess Success)</strong><br>Weasel wins (their bet x2) + the entire Catch Pot. Owls lose their bets and must pay the Weasel's winnings.</li>
+                            <li><strong>Scenario 3: A Contested Outcome (Catch Success, Guess Success)</strong><br>Bonuses are cancelled. Owls win the Catch Pot (get their bets back). Weasel wins the Guess Pot (gets their bet back). Twigs are transferred between teams.</li>
                             <li><strong>Scenario 4: Total Failure (Catch Failure, Guess Failure)</strong><br>Nobody wins. All bets are lost and removed from the game.</li>
                         </ul>
                         <h3>4. End of the Game</h3>
-                        <p>The game ends if a player reaches 100 points, a player's score hits 0, or after 10 rounds. The player with the highest score wins.</p>
+                        <p>The game ends if a player reaches 100 twigs, a player's score hits 0, or after 10 rounds. The player with the highest score wins.</p>
                     </div>
                 </details>
             </div>
@@ -910,6 +917,7 @@
             mainPhase: document.getElementById('main-phase-screen'),
             buffer: document.getElementById('buffer-screen'),
             voteResults: document.getElementById('vote-results-screen'),
+            weaselReveal: document.getElementById('weasel-reveal-screen'),
             weaselGuess: document.getElementById('weasel-guess-screen'),
             scoring: document.getElementById('scoring-screen'),
             gameOver: document.getElementById('game-over-screen')
@@ -937,6 +945,8 @@
             continueBufferBtn: document.getElementById('continue-buffer-btn'),
             voteResultsContent: document.getElementById('vote-results-content'),
             continueAfterVotesBtn: document.getElementById('continue-after-votes-btn'),
+            weaselRevealContent: document.getElementById('weasel-reveal-content'),
+            continueToGuessBtn: document.getElementById('continue-to-guess-btn'),
             weaselGuessTitle: document.getElementById('weasel-guess-title'),
             weaselGuessInstruction: document.getElementById('weasel-guess-instruction'),
             weaselGuessGrid: document.getElementById('weasel-guess-grid'),
@@ -1023,10 +1033,15 @@
         }
         
         function advancePhase() {
-            const phaseOrder = ['reveal', 'clue1', 'wager', 'clue2', 'verdict', 'voteResults', 'weaselGuess', 'scoring'];
+            const phaseOrder = ['reveal', 'clue1', 'wager', 'clue2', 'verdict', 'voteResults', 'weaselReveal', 'weaselGuess', 'scoring'];
             const currentPhaseIndex = phaseOrder.indexOf(gameState.phase);
             if (currentPhaseIndex !== -1 && currentPhaseIndex < phaseOrder.length - 1) {
                 gameState.phase = phaseOrder[currentPhaseIndex + 1];
+                
+                // Add transition screens before private phases
+                if (gameState.phase === 'wager' || gameState.phase === 'verdict') {
+                    gameState.phase = `transition-${gameState.phase}`;
+                }
             }
         }
         
@@ -1041,9 +1056,9 @@
                 case 'wager':
                     const betInput = document.getElementById('bet-input');
                     const betAmount = parseInt(betInput.value);
-                    if (isNaN(betAmount) || betAmount < 5) { alert("You must bet at least 5 points."); return; }
-                    if (betAmount > 25 && player.score > 25) { alert("You can bet a maximum of 25 points."); return; }
-                    if (betAmount > player.score) { alert("You cannot bet more points than you have."); return; }
+                    if (isNaN(betAmount) || betAmount < 5) { alert("You must bet at least 5 twigs."); return; }
+                    if (betAmount > 25 && player.score > 25) { alert("You can bet a maximum of 25 twigs."); return; }
+                    if (betAmount > player.score) { alert("You cannot bet more twigs than you have."); return; }
                     player.bet = betAmount;
                     break;
                 case 'verdict':
@@ -1053,8 +1068,10 @@
                     break;
             }
             
-            if (gameState.phase === 'verdict' && gameState.currentPlayerIndex < gameState.players.length - 1) {
-                // Show buffer screen between voting players
+            // Check if we need to show buffer screen between players for private phases
+            if ((gameState.phase === 'wager' || gameState.phase === 'verdict') && gameState.currentPlayerIndex < gameState.players.length - 1) {
+                // Store current phase info before going to buffer
+                gameState.previousPhase = gameState.phase;
                 gameState.phase = 'buffer';
                 updateUI();
                 return;
@@ -1064,8 +1081,27 @@
         }
         
         function continueFromBuffer() {
-            gameState.phase = 'verdict';
-            gameState.currentPlayerIndex++;
+            // Determine which phase to return to based on what we were doing before the buffer
+            if (gameState.currentPlayerIndex < gameState.players.length - 1) {
+                // Still have more players for the current phase
+                gameState.currentPlayerIndex++;
+                // Return to the phase we were in before the buffer
+                if (gameState.phase === 'buffer') {
+                    // Check if we have any players with bets set but not all players
+                    const playersWithBets = gameState.players.filter(p => p.bet > 0).length;
+                    const playersWithVotes = gameState.players.filter(p => p.vote !== null).length;
+                    
+                    if (playersWithBets > 0 && playersWithBets < gameState.players.length) {
+                        gameState.phase = 'wager';
+                    } else if (playersWithVotes > 0 && playersWithVotes < gameState.players.length) {
+                        gameState.phase = 'verdict';
+                    }
+                }
+            } else {
+                // This was the last player, advance to next phase
+                gameState.currentPlayerIndex = 0;
+                advancePhase();
+            }
             updateUI();
         }
         
@@ -1098,18 +1134,71 @@
             if (accusedIndex !== -1) {
                 const accusedPlayer = gameState.players[accusedIndex];
                 resultsHTML += `<p style="font-size: 1.2em; margin: 20px 0;"><strong>Most votes: ${accusedPlayer.name} (${maxVotes} votes)</strong></p>`;
-                
-                if (accusedIndex === gameState.weaselIndex) {
-                    resultsHTML += `<p style="color: var(--success-color); font-weight: bold;">✅ The group caught the Weasel!</p>`;
-                } else {
-                    resultsHTML += `<p style="color: var(--error-color); font-weight: bold;">❌ The group accused an innocent player!</p>`;
-                }
             } else {
                 resultsHTML += `<p style="color: var(--warning-color); font-weight: bold;">⚠️ No clear majority vote!</p>`;
             }
             
             gameInfo.voteResultsContent.innerHTML = resultsHTML;
             gameState.accusedIndex = accusedIndex;
+        }
+        
+        function showWeaselReveal() {
+            const weasel = gameState.players[gameState.weaselIndex];
+            const accusedIndex = gameState.accusedIndex;
+            const catchSuccess = accusedIndex === gameState.weaselIndex;
+            
+            let revealHTML = '';
+            
+            if (accusedIndex !== -1) {
+                const accusedPlayer = gameState.players[accusedIndex];
+                
+                revealHTML += `<div style="margin-bottom: var(--spacing-xl);">`;
+                revealHTML += `<h3 style="text-align: center; margin-bottom: var(--spacing-lg); color: var(--text-secondary);">The Vote Results</h3>`;
+                revealHTML += `<div style="background: var(--neutral-200); padding: var(--spacing-lg); border-radius: var(--border-radius); text-align: center; margin-bottom: var(--spacing-lg);">`;
+                revealHTML += `<p style="margin-bottom: var(--spacing-sm);">The group accused:</p>`;
+                revealHTML += `<p style="font-size: 1.2em; font-weight: 600; color: var(--primary-color);">${accusedPlayer.name}</p>`;
+                revealHTML += `</div>`;
+                revealHTML += `</div>`;
+                
+                revealHTML += `<div style="margin-bottom: var(--spacing-xl);">`;
+                revealHTML += `<h3 style="text-align: center; margin-bottom: var(--spacing-lg); color: var(--text-secondary);">The Truth</h3>`;
+                revealHTML += `<div style="background: var(--secondary-gradient); color: var(--text-on-secondary); padding: var(--spacing-lg); border-radius: var(--border-radius); text-align: center; margin-bottom: var(--spacing-lg);">`;
+                revealHTML += `<p style="margin-bottom: var(--spacing-sm);">The actual Weasel was:</p>`;
+                revealHTML += `<p style="font-size: 1.2em; font-weight: 700;">🐭 ${weasel.name}</p>`;
+                revealHTML += `</div>`;
+                revealHTML += `</div>`;
+                
+                if (catchSuccess) {
+                    revealHTML += `<div style="background: var(--accent-gradient); color: var(--text-on-accent); padding: var(--spacing-md); border-radius: var(--border-radius); text-align: center; font-weight: 600;">`;
+                    revealHTML += `✅ The Owls successfully caught the Weasel!`;
+                    revealHTML += `</div>`;
+                } else {
+                    revealHTML += `<div style="background: var(--warning-gradient); color: var(--text-on-warning); padding: var(--spacing-md); border-radius: var(--border-radius); text-align: center; font-weight: 600;">`;
+                    revealHTML += `❌ The Weasel escaped detection`;
+                    revealHTML += `</div>`;
+                }
+            } else {
+                revealHTML += `<div style="margin-bottom: var(--spacing-xl);">`;
+                revealHTML += `<h3 style="text-align: center; margin-bottom: var(--spacing-lg); color: var(--text-secondary);">The Vote Results</h3>`;
+                revealHTML += `<div style="background: var(--neutral-200); padding: var(--spacing-lg); border-radius: var(--border-radius); text-align: center; margin-bottom: var(--spacing-lg);">`;
+                revealHTML += `<p style="color: var(--warning-color); font-weight: 600;">No clear majority vote</p>`;
+                revealHTML += `</div>`;
+                revealHTML += `</div>`;
+                
+                revealHTML += `<div style="margin-bottom: var(--spacing-xl);">`;
+                revealHTML += `<h3 style="text-align: center; margin-bottom: var(--spacing-lg); color: var(--text-secondary);">The Truth</h3>`;
+                revealHTML += `<div style="background: var(--secondary-gradient); color: var(--text-on-secondary); padding: var(--spacing-lg); border-radius: var(--border-radius); text-align: center; margin-bottom: var(--spacing-lg);">`;
+                revealHTML += `<p style="margin-bottom: var(--spacing-sm);">The Weasel was:</p>`;
+                revealHTML += `<p style="font-size: 1.2em; font-weight: 700;">🐭 ${weasel.name}</p>`;
+                revealHTML += `</div>`;
+                revealHTML += `</div>`;
+                
+                revealHTML += `<div style="background: var(--warning-gradient); color: var(--text-on-warning); padding: var(--spacing-md); border-radius: var(--border-radius); text-align: center; font-weight: 600;">`;
+                revealHTML += `❌ The Weasel escaped due to voting confusion`;
+                revealHTML += `</div>`;
+            }
+            
+            gameInfo.weaselRevealContent.innerHTML = revealHTML;
         }
         
         function setupWeaselGuess() {
@@ -1157,85 +1246,53 @@
             
             const weasel = gameState.players[gameState.weaselIndex];
             const innocents = gameState.players.filter(p => !p.isWeasel);
-            const catchPot = innocents.reduce((sum, p) => sum + p.bet, 0);
-            const guessPot = weasel.bet;
             
             const changes = gameState.players.map(p => ({ name: p.name, change: 0, oldScore: p.score }));
 
             let outcomeKey;
             
-            // Scenario 1: Decisive Innocent Victory (Catch Success, Guess Failure)
+            // Scenario 1: Only Owls win (Catch Success, Guess Failure)
             if (catchSuccess && !guessSuccess) {
                 outcomeKey = "innocent-win";
-                // Innocents: Win their bets with a 2x Bonus
+                // Owls: Win 2x their stake for successful catch bet
                 innocents.forEach(p => {
                     const winnings = p.bet * 2;
                     p.score += winnings;
                     changes[gameState.players.indexOf(p)].change = winnings;
                 });
-                // Weasel: Loses the entire Catch Pot x 2 AND their own failed Guess Pot bet
-                const weaselLoss = (catchPot * 2) + guessPot;
-                weasel.score -= weaselLoss;
-                changes[gameState.weaselIndex].change = -weaselLoss;
+                // Weasel: Loses their failed guess bet
+                weasel.score -= weasel.bet;
+                changes[gameState.weaselIndex].change = -weasel.bet;
             }
-            // Scenario 2: Masterful Weasel Victory (Catch Failure, Guess Success)
+            // Scenario 2: Only Weasel wins (Catch Failure, Guess Success)
             else if (!catchSuccess && guessSuccess) {
                 outcomeKey = "weasel-win";
-                // Weasel: Wins their Guess Pot bet with a 2x Bonus AND wins the entire Catch Pot
-                const weaselWinnings = (guessPot * 2) + catchPot;
+                // Weasel: Wins 2x their stake for successful guess bet
+                const weaselWinnings = weasel.bet * 2;
                 weasel.score += weaselWinnings;
                 weasel.weaselPoints += weaselWinnings;
                 changes[gameState.weaselIndex].change = weaselWinnings;
 
-                // Innocents: Lose their bets from the Catch Pot AND must collectively pay the Weasel's winnings from the Guess Pot
-                const weaselGuessPotWinnings = guessPot * 2; // The 2x bonus amount Weasel won from Guess Pot
+                // Owls: Lose their failed catch bets
                 innocents.forEach(p => {
                     const innocentIndex = gameState.players.indexOf(p);
-                    // Lose their bet from Catch Pot
-                    let totalLoss = p.bet;
-                    
-                    // Pay proportional share of Weasel's Guess Pot winnings
-                    if (catchPot > 0) {
-                        const proportionalShare = (p.bet / catchPot) * weaselGuessPotWinnings;
-                        totalLoss += proportionalShare;
-                    }
-                    
-                    p.score -= totalLoss;
-                    changes[innocentIndex].change = -totalLoss;
+                    p.score -= p.bet;
+                    changes[innocentIndex].change = -p.bet;
                 });
             }
-            // Scenario 3: A Contested Outcome (Catch Success, Guess Success)
+            // Scenario 3: Both sides win - Push (Catch Success, Guess Success)
             else if (catchSuccess && guessSuccess) {
                 outcomeKey = "contested-win";
-                // Innocents WIN the Catch Pot: Each gets their original bet back (net change = 0 from their own bet)
-                // Weasel WINS the Guess Pot: Gets their original bet back (net change = 0 from their own bet)
-                // The net transfer: Weasel pays Catch Pot, Innocents pay Guess Pot
-                
-                // Weasel pays out the Catch Pot but gets back their Guess Pot
-                const weaselNetChange = guessPot - catchPot;
-                weasel.score += weaselNetChange;
-                if (weaselNetChange > 0) weasel.weaselPoints += weaselNetChange;
-                changes[gameState.weaselIndex].change = weaselNetChange;
-
-                // Each Innocent gets their bet back but pays proportional share of Guess Pot
-                innocents.forEach(p => {
-                    const innocentIndex = gameState.players.indexOf(p);
-                    let netChange = p.bet; // Get their bet back from Catch Pot
-                    
-                    // Pay proportional share of Guess Pot
-                    if (catchPot > 0) {
-                        const proportionalPayment = (p.bet / catchPot) * guessPot;
-                        netChange -= proportionalPayment;
-                    }
-                    
-                    p.score += netChange;
-                    changes[innocentIndex].change = netChange;
+                // Everyone gets back exactly what they wagered (1x) - net change is 0
+                // No score changes needed since everyone "pushes"
+                gameState.players.forEach((p, i) => {
+                    changes[i].change = 0;
                 });
             }
-            // Scenario 4: Total Failure (Catch Failure, Guess Failure)
+            // Scenario 4: Both sides lose (Catch Failure, Guess Failure)
             else { // !catchSuccess && !guessSuccess
                 outcomeKey = "total-failure";
-                // All bets are lost and removed from the game
+                // Everyone loses their bet
                 gameState.players.forEach((p, i) => {
                     p.score -= p.bet;
                     changes[i].change = -p.bet;
@@ -1253,13 +1310,13 @@
             const highScorer = gameState.players.find(p => p.score >= 100);
             if (highScorer) {
                 gameOver = true;
-                reason = `${highScorer.name} reached 100 points!`;
+                reason = `${highScorer.name} reached 100 twigs!`;
             }
             
             const bankruptPlayer = gameState.players.find(p => p.score <= 0);
             if (bankruptPlayer) {
                 gameOver = true;
-                reason = `${bankruptPlayer.name} ran out of points!`;
+                reason = `${bankruptPlayer.name} ran out of twigs!`;
             }
 
             if (gameOver) {
@@ -1284,7 +1341,7 @@
             
             gameInfo.winnerAnnouncement.innerHTML = `
                 ${reason}<br>
-                <strong>The winner is ${winner.name} with ${Math.round(winner.score)} points!</strong>
+                <strong>The winner is ${winner.name} with ${Math.round(winner.score)} twigs!</strong>
             `;
             updateUI();
         }
@@ -1319,6 +1376,14 @@
                     screens.passDevice.classList.add('active');
                     gameInfo.passToPlayerName.textContent = `Pass to ${player.name}`;
                     break;
+                
+                case 'transition-wager':
+                case 'transition-verdict':
+                    screens.passDevice.classList.add('active');
+                    const phaseType = gameState.phase.replace('transition-', '');
+                    const phaseNames = { wager: 'Wagering', verdict: 'Voting' };
+                    gameInfo.passToPlayerName.textContent = `${phaseNames[phaseType]}: Pass to ${player.name}`;
+                    break;
                     
                 case 'clue1':
                 case 'wager':
@@ -1330,11 +1395,23 @@
                     
                 case 'buffer':
                     screens.buffer.classList.add('active');
+                    // Update buffer screen with next player info
+                    const nextPlayerIndex = gameState.currentPlayerIndex + 1;
+                    if (nextPlayerIndex < gameState.players.length) {
+                        const nextPlayer = gameState.players[nextPlayerIndex];
+                        document.querySelector('#buffer-screen h2').textContent = `🔄 Pass to ${nextPlayer.name}`;
+                        document.querySelector('#buffer-screen p').textContent = `Please hand the device to ${nextPlayer.name} and ensure the previous player looks away.`;
+                    }
                     break;
                     
                 case 'voteResults':
                     screens.voteResults.classList.add('active');
                     showVoteResults();
+                    break;
+                    
+                case 'weaselReveal':
+                    screens.weaselReveal.classList.add('active');
+                    showWeaselReveal();
                     break;
                     
                 case 'weaselGuess':
@@ -1358,10 +1435,10 @@
             screens.reveal.classList.add('active');
             
             const player = gameState.players[gameState.currentPlayerIndex];
-            gameInfo.revealRoleTitle.textContent = player.isWeasel ? "You are the WEASEL!" : "You are an INNOCENT";
+            gameInfo.revealRoleTitle.textContent = player.isWeasel ? "You are the WEASEL!" : "You are an OWL";
             gameInfo.revealInstruction.textContent = player.isWeasel 
                 ? "You DON'T know the secret word. Blend in and try to figure it out from the clues!"
-                : "Your team's secret word is highlighted below. Give clues to help your fellow Innocents find the Weasel without giving the word away!";
+                : "Your team's secret word is highlighted below. Give clues to help your fellow Owls find the Weasel without giving the word away!";
             
             gameInfo.revealWordGrid.innerHTML = gameState.wordGrid.map(word => 
                 `<div class="word-cell ${!player.isWeasel && word === gameState.secretWord ? 'secret' : ''}">${word}</div>`
@@ -1381,8 +1458,12 @@
                     break;
                 case 'wager':
                     title = `Wager: ${player.name}'s Turn`;
-                    instruction = `All clues for round 1 have been given. Secretly place your bet. Your current score: ${Math.round(player.score)}`;
-                    inputHTML = `<input type="number" id="bet-input" min="5" max="${Math.min(25, player.score)}" placeholder="Bet 5-25 points">`;
+                    if (player.isWeasel) {
+                        instruction = `You are the Weasel. Bet on your ability to guess the secret word. Your current score: ${Math.round(player.score)} twigs`;
+                    } else {
+                        instruction = `You are an Owl. Bet on your team's ability to catch the Weasel. Your current score: ${Math.round(player.score)} twigs`;
+                    }
+                    inputHTML = `<input type="number" id="bet-input" min="5" max="${Math.min(25, player.score)}" placeholder="Bet 5-25 twigs">`;
                     buttonText = "Submit Bet";
                     break;
                 case 'clue2':
@@ -1427,24 +1508,24 @@
 
         function displayScoringSummary(outcomeKey, results, changes) {
             const outcomeTitles = {
-                "innocent-win": "Decisive Innocent Victory!",
-                "weasel-win": "Masterful Weasel Victory!",
-                "contested-win": "Contested Outcome!",
-                "total-failure": "Total Failure!"
+                "innocent-win": "Owls Win!",
+                "weasel-win": "Weasel Wins!",
+                "contested-win": "Push - Both Sides Win!",
+                "total-failure": "Total Failure - Everyone Loses!"
             };
 
             const outcomeDescriptions = {
-                "innocent-win": "The Innocents caught the Weasel, and the Weasel failed to guess the word. <strong>Innocents get a 2x bonus!</strong>",
-                "weasel-win": "The Weasel escaped and guessed the secret word! <strong>The Weasel gets a 2x bonus and steals the Catch Pot!</strong>",
-                "contested-win": "The Innocents caught the Weasel, but the Weasel ALSO guessed the word. <strong>Bonuses are cancelled.</strong>",
-                "total-failure": "The Innocents failed to catch the Weasel, AND the Weasel failed to guess. <strong>Everybody loses their bets!</strong>"
+                "innocent-win": "The Owls caught the Weasel, and the Weasel failed to guess the word. <strong>Owls win 2× their catch bets!</strong>",
+                "weasel-win": "The Weasel escaped detection and guessed the secret word! <strong>The Weasel wins 2× their guess bet!</strong>",
+                "contested-win": "The Owls caught the Weasel, but the Weasel ALSO guessed the word correctly. <strong>Everyone pushes and gets back their original bet (1×).</strong>",
+                "total-failure": "The Owls failed to catch the Weasel, AND the Weasel failed to guess the word. <strong>Everyone loses their bets!</strong>"
             };
 
             const scoreChangesHTML = changes.map(c => {
                 const change = Math.round(c.change * 100) / 100;
                 const changeClass = change > 0 ? 'score-gain' : (change < 0 ? 'score-loss' : '');
                 const sign = change > 0 ? '+' : '';
-                return `<li><span>${c.name}</span> <strong class="${changeClass}">${sign}${change} pts</strong> ( ${Math.round(c.oldScore)} → ${Math.round(c.oldScore + change)} )</li>`;
+                return `<li><span>${c.name}</span> <strong class="${changeClass}">${sign}${change} twigs</strong> ( ${Math.round(c.oldScore)} → ${Math.round(c.oldScore + change)} )</li>`;
             }).join('');
 
             gameInfo.scoringSummary.innerHTML = `
@@ -1480,11 +1561,14 @@
         gameInfo.showRoleBtn.addEventListener('click', () => {
             if (gameState.phase === 'reveal') {
                 showRevealScreen();
-            } else if (gameState.phase === 'verdict') {
-                // Show the voting screen for the current player
-                screens.passDevice.classList.remove('active');
-                screens.mainPhase.classList.add('active');
-                setupMainPhaseScreen();
+            } else if (gameState.phase === 'transition-wager') {
+                // Transition from wager handoff to actual wager screen
+                gameState.phase = 'wager';
+                updateUI();
+            } else if (gameState.phase === 'transition-verdict') {
+                // Transition from verdict handoff to actual verdict screen
+                gameState.phase = 'verdict';
+                updateUI();
             }
         });
         
@@ -1504,6 +1588,11 @@
         gameInfo.continueBufferBtn.addEventListener('click', continueFromBuffer);
         
         gameInfo.continueAfterVotesBtn.addEventListener('click', () => {
+            gameState.phase = 'weaselReveal';
+            updateUI();
+        });
+        
+        gameInfo.continueToGuessBtn.addEventListener('click', () => {
             gameState.phase = 'weaselGuess';
             updateUI();
         });
