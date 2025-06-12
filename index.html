@@ -833,6 +833,9 @@
         /* Game screen header adjustments */
         body.in-game header {
             padding: var(--spacing-xl) var(--spacing-2xl) var(--spacing-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         body.in-game header h1 {
@@ -847,8 +850,12 @@
 
         /* Reduce header images during game phases */
         body.in-game header .header-image {
-            height: 60%; /* Smaller images during game */
-            opacity: 0.8;
+            height: 90%;
+            opacity: 0.95;
+        }
+
+        body.in-game header .header-content {
+            z-index: 2; /* Ensure text is above images */
         }
     </style>
 </head>
@@ -1666,7 +1673,7 @@
                     break;
                     
                 case 'transition-clue1':
-                case 'clue1':
+                               case 'clue1':
                 case 'wager':
                 case 'transition-clue2':
                 case 'clue2':
