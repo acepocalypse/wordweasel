@@ -324,18 +324,17 @@ label {
 }
 
 .player-input-group::before {
-    content: '🦊';
-    font-size: 34px;
-    opacity: 0.95;
+    content: '';
+    background-image: url('../assets/favicon.png');
+    background-size: contain;
+    background-repeat: no-repeat;
     width: 48px;
-    text-align: center;
+    height: 48px;
     flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 48px;
-    line-height: 1;
-    padding-bottom: 16px;
+    opacity: 0.95;
 }
 
 /* Player Counter */
@@ -818,6 +817,314 @@ label {
     color: var(--text-secondary);
 }
 
+/* Welcome Section */
+.welcome-section {
+    margin-bottom: var(--spacing-3xl);
+    text-align: center;
+    padding: var(--spacing-2xl);
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+    border-radius: var(--border-radius-xl);
+    color: var(--text-on-primary);
+    position: relative;
+    overflow: hidden;
+}
+
+.welcome-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 20% 80%, rgba(255, 149, 0, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(52, 199, 89, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.welcome-text {
+    position: relative;
+    z-index: 1;
+}
+
+.welcome-text h2 {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: var(--spacing-md);
+    color: var(--text-on-primary);
+    letter-spacing: -0.5px;
+}
+
+.welcome-text p {
+    font-size: 18px;
+    opacity: 0.9;
+    margin-bottom: var(--spacing-2xl);
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.5;
+}
+
+.game-stats {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-3xl);
+    margin-top: var(--spacing-xl);
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.stat-number {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-on-primary);
+}
+
+.stat-label {
+    font-size: 12px;
+    opacity: 0.8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+}
+
+/* Enhanced Setup Card */
+.setup-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.setup-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+}
+
+.setup-header {
+    text-align: center;
+    margin-bottom: var(--spacing-2xl);
+    padding-bottom: var(--spacing-lg);
+    border-bottom: 1px solid var(--border-light);
+}
+
+.setup-header h2 {
+    margin-bottom: var(--spacing-sm);
+    color: var(--primary-color);
+    font-size: 24px;
+}
+
+.setup-subtitle {
+    color: var(--text-secondary);
+    font-size: 14px;
+    margin: 0;
+}
+
+.player-inputs-header {
+    text-align: center;
+    margin: var(--spacing-2xl) 0 var(--spacing-xl) 0;
+}
+
+.player-inputs-header h3 {
+    color: var(--text-primary);
+    font-size: 18px;
+    margin-bottom: var(--spacing-xs);
+}
+
+.player-inputs-header p {
+    color: var(--text-secondary);
+    font-size: 14px;
+    margin: 0;
+}
+
+/* Enhanced Button */
+.btn-primary-large {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+    font-size: 18px;
+    font-weight: 700;
+    padding: var(--spacing-xl) var(--spacing-3xl);
+    box-shadow: var(--shadow-medium);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-primary-large::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.btn-primary-large:hover::before {
+    left: 100%;
+}
+
+.btn-primary-large:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-large);
+}
+
+.btn-primary-large .btn-icon {
+    margin-right: var(--spacing-sm);
+    font-size: 20px;
+}
+
+/* Game Preview Section */
+.game-preview {
+    margin: var(--spacing-4xl) 0;
+    padding: var(--spacing-2xl);
+    background: var(--background-tertiary);
+    border-radius: var(--border-radius-xl);
+    border: 1px solid var(--border-light);
+}
+
+.game-preview h3 {
+    text-align: center;
+    color: var(--primary-color);
+    font-size: 20px;
+    margin-bottom: var(--spacing-2xl);
+}
+
+.preview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-xl);
+}
+
+.preview-step {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg);
+    background: var(--background-primary);
+    border-radius: var(--border-radius-lg);
+    border: 1px solid var(--border-light);
+    transition: var(--transition);
+}
+
+.preview-step:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-small);
+    border-color: var(--border-medium);
+}
+
+.step-icon {
+    font-size: 24px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--background-tertiary);
+    border-radius: var(--border-radius-md);
+    flex-shrink: 0;
+}
+
+.step-content h4 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-xs);
+}
+
+.step-content p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.4;
+    margin: 0;
+}
+
+/* Enhanced Player Input Groups */
+.player-input-group {
+    background: var(--background-secondary);
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-sm);
+    transition: var(--transition);
+    border: 1px solid var(--border-light);
+}
+
+.player-input-group:focus-within {
+    background: var(--background-primary);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(33, 52, 72, 0.1);
+}
+
+.player-input-group input {
+    background: transparent;
+    border: none;
+    margin-bottom: 0;
+    box-shadow: none;
+}
+
+.player-input-group input:focus {
+    box-shadow: none;
+    border: none;
+}
+
+/* Enhanced Counter */
+.player-counter {
+    box-shadow: var(--shadow-small);
+    transition: var(--transition);
+}
+
+.player-counter:hover {
+    box-shadow: var(--shadow-medium);
+}
+
+.counter-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.counter-btn:disabled:hover {
+    background: var(--primary-color);
+    transform: none;
+}
+
+/* Enhanced Rules Section */
+#rules-container details {
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-small);
+    transition: var(--transition);
+}
+
+#rules-container details:hover {
+    box-shadow: var(--shadow-medium);
+}
+
+#rules-container summary {
+    background: linear-gradient(135deg, var(--background-tertiary), var(--background-secondary));
+    position: relative;
+}
+
+#rules-container summary::after {
+    content: '▼';
+    position: absolute;
+    right: var(--spacing-xl);
+    top: 50%;
+    transform: translateY(-50%);
+    transition: transform 0.3s;
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+#rules-container details[open] summary::after {
+    transform: translateY(-50%) rotate(180deg);
+}
+
 /* Animations */
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(8px); }
@@ -945,5 +1252,41 @@ label {
     div[style*="grid-template-columns: 1fr 1fr"] {
         grid-template-columns: 1fr 1fr !important;
         gap: var(--spacing-xs);
+    }
+    
+    .welcome-text h2 {
+        font-size: 24px;
+    }
+    
+    .welcome-text p {
+        font-size: 16px;
+    }
+    
+    .game-stats {
+        gap: var(--spacing-xl);
+    }
+    
+    .stat-number {
+        font-size: 20px;
+    }
+    
+    .preview-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+    
+    .preview-step {
+        flex-direction: column;
+        text-align: center;
+        gap: var(--spacing-sm);
+    }
+    
+    .btn-primary-large {
+        font-size: 16px;
+        padding: var(--spacing-lg) var(--spacing-2xl);
+    }
+    
+    .game-preview {
+        padding: var(--spacing-xl);
     }
 }

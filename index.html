@@ -22,8 +22,35 @@
         <main>
             <!-- SETUP SCREEN -->
             <div id="setup-screen" class="screen active">
-                <div class="card">
-                    <h2 style="text-align: center; margin-bottom: var(--spacing-2xl); color: var(--primary-color); font-size: 28px; padding-bottom: var(--spacing-sm); border-bottom: 2px solid var(--border-light);">Game Setup</h2>
+                <!-- Welcome Section -->
+                <div class="welcome-section">
+                    <div class="welcome-text">
+                        <h2>🎭 Welcome to the Den</h2>
+                        <p>A thrilling game of deception where foxes hunt the cunning rabbit. Who will outsmart whom?</p>
+                        <div class="game-stats">
+                            <div class="stat-item">
+                                <span class="stat-number">4-10</span>
+                                <span class="stat-label">Players</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number">20-30</span>
+                                <span class="stat-label">Minutes</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number">🎯</span>
+                                <span class="stat-label">Strategy</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game Setup Card -->
+                <div class="card setup-card">
+                    <div class="setup-header">
+                        <h2>🎮 Game Setup</h2>
+                        <p class="setup-subtitle">Configure your game to begin the hunt</p>
+                    </div>
+                    
                     <div class="player-count-container">
                         <label class="player-count-label" for="player-count">Number of players:</label>
                         
@@ -37,10 +64,52 @@
                         <div class="counter-note">4-10 players</div>
                     </div>
                     
+                    <div class="player-inputs-header">
+                        <h3>👥 Player Names</h3>
+                        <p>Enter names for each player (optional)</p>
+                    </div>
                     <div id="player-inputs"></div>
                 </div>
                 
-                <button id="start-game-btn" class="btn">Start Game</button>
+                <button id="start-game-btn" class="btn btn-primary-large">
+                    <span class="btn-icon">🚀</span>
+                    <span>Start the Hunt</span>
+                </button>
+
+                <!-- Game Preview Section -->
+                <div class="game-preview">
+                    <h3>🎯 How to Play</h3>
+                    <div class="preview-grid">
+                        <div class="preview-step">
+                            <div class="step-icon">📱</div>
+                            <div class="step-content">
+                                <h4>Pass & Peek</h4>
+                                <p>Each player secretly views their role</p>
+                            </div>
+                        </div>
+                        <div class="preview-step">
+                            <div class="step-icon">💭</div>
+                            <div class="step-content">
+                                <h4>Give Clues</h4>
+                                <p>Foxes hint at the word, Rabbit bluffs</p>
+                            </div>
+                        </div>
+                        <div class="preview-step">
+                            <div class="step-icon">🥕</div>
+                            <div class="step-content">
+                                <h4>Place Bets</h4>
+                                <p>Wager carrots on your success</p>
+                            </div>
+                        </div>
+                        <div class="preview-step">
+                            <div class="step-icon">🗳️</div>
+                            <div class="step-content">
+                                <h4>Vote & Guess</h4>
+                                <p>Find the Rabbit, then they guess the word</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 
                 <div id="rules-container">
                     <details>
