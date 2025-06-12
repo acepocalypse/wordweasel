@@ -107,6 +107,31 @@
             background: var(--primary-color);
             padding: var(--spacing-3xl) var(--spacing-2xl) var(--spacing-xl);
             text-align: center;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        header .header-image {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            object-fit: contain;
+            opacity: 1;
+        }
+
+        header .header-image.left {
+            left: var(--spacing-2xl);
+        }
+
+        header .header-image.right {
+            right: var(--spacing-2xl);
+        }
+
+        header .header-content {
+            z-index: 1;
+            position: relative;
         }
 
         header h1 {
@@ -711,8 +736,12 @@
 
     <div id="app-container">
         <header>
-            <h1>Bluff Den</h1>
-            <p>In the den, only the clever survive.</p>
+            <img src="bunnyheader.png" alt="Rabbit" class="header-image left">
+            <div class="header-content">
+                <h1>Bluff Den</h1>
+                <p>In the den, only the clever survive.</p>
+            </div>
+            <img src="foxheader.png" alt="Fox" class="header-image right">
         </header>
         <main>
             <!-- SETUP SCREEN -->
@@ -1115,20 +1144,47 @@
                 }
             }
             
-            // Display results
-            let resultsHTML = '<h3>How everyone voted:</h3><ul style="text-align: left; margin: 20px 0;">';
-            gameState.players.forEach((player, index) => {
-                const votedFor = player.vote !== null ? gameState.players[player.vote].name : 'No vote';
-                resultsHTML += `<li><strong>${player.name}</strong> voted for: ${votedFor}</li>`;
-            });
-            resultsHTML += '</ul>';
+            // Display results with improved design
+            let resultsHTML = '';
             
+            // Header with thematic text
+            resultsHTML += `<div style="text-align: center; margin-bottom: var(--spacing-xl);">`;
+            resultsHTML += `<p style="color: var(--text-secondary); font-size: 16px; margin-bottom: var(--spacing-md);">The pack has spoken... let's see who they suspect</p>`;
+            resultsHTML += `</div>`;
+            
+            // Vote breakdown in a clean list
+            resultsHTML += `<div style="background: var(--background-tertiary); border-radius: var(--border-radius-lg); padding: var(--spacing-xl); margin-bottom: var(--spacing-xl);">`;
+            resultsHTML += `<h3 style="text-align: center; margin-bottom: var(--spacing-lg); color: var(--text-secondary); font-size: 18px;">Individual Votes</h3>`;
+            resultsHTML += `<div style="display: grid; gap: var(--spacing-sm);">`;
+            
+            gameState.players.forEach((player, index) => {
+                const votedFor = player.vote !== null ? gameState.players[player.vote].name : 'No vote cast';
+                resultsHTML += `<div style="display: flex; justify-content: space-between; align-items: center; padding: var(--spacing-md) var(--spacing-lg); background: var(--background-primary); border-radius: var(--border-radius-md); border: 1px solid var(--border-light);">`;
+                resultsHTML += `<span style="font-weight: 600; color: var(--text-primary);">${player.name}</span>`;
+                resultsHTML += `<span style="color: var(--text-secondary);">voted for <strong style="color: var(--primary-color);">${votedFor}</strong></span>`;
+                resultsHTML += `</div>`;
+            });
+            resultsHTML += `</div>`;
+            resultsHTML += `</div>`;
+            
+            // Final verdict section
+            resultsHTML += `<div style="text-align: center;">`;
             if (accusedIndex !== -1) {
                 const accusedPlayer = gameState.players[accusedIndex];
-                resultsHTML += `<p style="font-size: 1.2em; margin: 20px 0;"><strong>Most votes: ${accusedPlayer.name} (${maxVotes} votes)</strong></p>`;
+                resultsHTML += `<div style="background: var(--primary-color); color: var(--text-on-primary); padding: var(--spacing-xl); border-radius: var(--border-radius-lg); margin-bottom: var(--spacing-lg);">`;
+                resultsHTML += `<h3 style="margin-bottom: var(--spacing-sm); font-size: 20px; color: var(--text-on-primary);">🎯 The Pack's Verdict</h3>`;
+                resultsHTML += `<p style="font-size: 18px; font-weight: 600;">${accusedPlayer.name}</p>`;
+                resultsHTML += `<p style="font-size: 14px; opacity: 0.9; margin-top: var(--spacing-xs);">${maxVotes} vote${maxVotes !== 1 ? 's' : ''} against them</p>`;
+                resultsHTML += `</div>`;
+                resultsHTML += `<p style="color: var(--text-secondary); font-style: italic;">The foxes have made their choice. But was their hunt successful?</p>`;
             } else {
-                resultsHTML += `<p style="color: var(--warning-color); font-weight: bold;">⚠️ No clear majority vote!</p>`;
+                resultsHTML += `<div style="background: var(--warning-color); color: var(--text-on-color); padding: var(--spacing-xl); border-radius: var(--border-radius-lg); margin-bottom: var(--spacing-lg);">`;
+                resultsHTML += `<h3 style="margin-bottom: var(--spacing-sm); font-size: 20px;">⚠️ No Clear Target</h3>`;
+                resultsHTML += `<p style="font-size: 16px;">The pack couldn't agree on a suspect!</p>`;
+                resultsHTML += `</div>`;
+                resultsHTML += `<p style="color: var(--text-secondary); font-style: italic;">Confusion in the den... the rabbit may have escaped in the chaos.</p>`;
             }
+            resultsHTML += `</div>`;
             
             gameInfo.voteResultsContent.innerHTML = resultsHTML;
             gameState.accusedIndex = accusedIndex;
@@ -1172,7 +1228,7 @@
             } else {
                 revealHTML += `<div style="margin-bottom: var(--spacing-xl);">`;
                 revealHTML += `<h3 style="text-align: center; margin-bottom: var(--spacing-lg); color: var(--text-secondary);">The Vote Results</h3>`;
-                revealHTML += `<div style="background: var(--neutral-200); padding: var(--spacing-lg); border-radius: var(--border-radius); text-align: center; margin-bottom: var(--spacing-lg);">`;
+                revealHTML += `<div style="background: var(--neutral-200); padding: var(--spacing-lg); border-radius: var(--border-radius); text-align: center, margin-bottom: var(--spacing-lg);">`;
                 revealHTML += `<p style="color: var(--warning-color); font-weight: 600;">No clear majority vote</p>`;
                 revealHTML += `</div>`;
                 revealHTML += `</div>`;
