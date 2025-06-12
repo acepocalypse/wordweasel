@@ -753,8 +753,12 @@
                 padding: var(--spacing-2xl) var(--spacing-lg);
             }
 
+            header .header-image {
+                display: none; /* Hide images on mobile to prevent overlay */
+            }
+
             header h1 {
-                font-size: 24px;
+                font-size: 48px; /* Slightly larger since images are hidden */
             }
 
             main {
@@ -782,6 +786,11 @@
                 padding: var(--spacing-md);
                 min-height: 64px;
                 height: 64px;
+            }
+
+            /* Mobile reveal screen grid fix */
+            div[style*="grid-template-columns: 1fr 1fr"] {
+                grid-template-columns: 1fr !important;
             }
         }
 
