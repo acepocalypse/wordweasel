@@ -844,6 +844,12 @@
         body.in-game header p {
             display: none;
         }
+
+        /* Reduce header images during game phases */
+        body.in-game header .header-image {
+            height: 60%; /* Smaller images during game */
+            opacity: 0.8;
+        }
     </style>
 </head>
 <body>
