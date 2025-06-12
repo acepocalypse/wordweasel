@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Word Weasel - The Game</title>
+    <title>Bluff Den - The Game</title>
     <link href="https://fonts.googleapis.com/css2?family=Charmonman:wght@400;700&family=Cherry+Swash:wght@400;700&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -110,11 +110,12 @@
 
         header h1 {
             font-family: 'Charmonman', cursive;
-            font-size: 45px;
+            font-size: 54px;
             font-weight: 700;
             margin-bottom: var(--spacing-xs);
             color: var(--text-on-primary);
             letter-spacing: -0.5px;
+            padding-bottom: 10px;
         }
 
         header p {
@@ -342,10 +343,14 @@
             transition: var(--transition);
             color: var(--text-primary);
             cursor: default;
-            min-height: 48px;
+            min-height: 72px;
+            height: 72px;
             display: flex;
             align-items: center;
             justify-content: center;
+            line-height: 1.3;
+            word-wrap: break-word;
+            hyphens: auto;
         }
 
         .word-cell.secret {
@@ -377,6 +382,11 @@
         @media (min-width: 768px) {
             #word-grid, #main-word-grid, #reveal-word-grid, #weasel-guess-grid {
                 grid-template-columns: repeat(6, 1fr);
+            }
+            
+            .word-cell {
+                min-height: 80px;
+                height: 80px;
             }
         }
 
@@ -660,6 +670,8 @@
             .word-cell {
                 font-size: 13px;
                 padding: var(--spacing-md);
+                min-height: 64px;
+                height: 64px;
             }
         }
 
@@ -668,14 +680,23 @@
             outline: 2px solid var(--primary-color);
             outline-offset: 2px;
         }
+
+        /* Hide rules container on all screens except setup */
+        #rules-container {
+            display: none;
+        }
+
+        #setup-screen.active #rules-container {
+            display: block;
+        }
     </style>
 </head>
 <body>
 
     <div id="app-container">
         <header>
-            <h1>Word Weasel</h1>
-            <p>A game of cunning clues & clever misdirection.</p>
+            <h1>Bluff Den</h1>
+            <p>In the den, only the clever survive.</p>
         </header>
         <main>
             <!-- SETUP SCREEN -->
@@ -687,6 +708,40 @@
                     <div id="player-inputs"></div>
                 </div>
                 <button id="start-game-btn" class="btn">Start Game</button>
+                
+                <div id="rules-container">
+                    <details>
+                        <summary>Game Rules</summary>
+                        <div id="rules-content">
+                            <h3>1. Game Overview</h3>
+                            <p>In Bluff Den, players are divided into two secret teams each round: the <strong>Foxes</strong>, who know a secret word, and a single <strong>Rabbit</strong>, who is left in the dark. The goal is to be the first to 25 🥕 carrots.</p>
+                            <ul>
+                                <li><strong>Players:</strong> 4+</li>
+                                <li><strong>Roles:</strong> 1 Rabbit, rest Foxes</li>
+                                <li><strong>Starting Carrots:</strong> 10 🥕 per player</li>
+                                <li><strong>Bet Range:</strong> 1–3 🥕 carrots</li>
+                            </ul>
+                            <h3>2. The Flow of a Round</h3>
+                            <ol>
+                                <li><strong>The Word Grid Reveal (Pass the Phone):</strong> The app privately shows each player the 3x6 Word Grid. Foxes see the Secret Word highlighted; the Rabbit does not.</li>
+                                <li><strong>Broad Clue Round (Verbal):</strong> Each player gives a single-word or short-phrase clue out loud.</li>
+                                <li><strong>The Wager:</strong> All players secretly bet 🥕 carrots. Foxes bet on catching the Rabbit. The Rabbit bets on guessing the word.</li>
+                                <li><strong>Second Clue Round (Verbal):</strong> Each player gives a second, more specific clue out loud.</li>
+                                <li><strong>The Verdict:</strong> All players vote on who the Rabbit is. The Rabbit secretly guesses the word from the grid.</li>
+                            </ol>
+                            <h3>3. Scoring: The Interdependent Payout</h3>
+                            <p>Payouts depend on two things: Did the Foxes catch the Rabbit? (<strong>Catch Success</strong>) And did the Rabbit guess the word? (<strong>Guess Success</strong>). A <strong>2x Sabotage Bonus</strong> is applied if your team succeeds AND the other team fails.</p>
+                            <ul>
+                                <li><strong>Scenario 1: Decisive Fox Victory (Catch Success, Guess Failure)</strong><br>Foxes win their bets x2. Rabbit loses their bet.</li>
+                                <li><strong>Scenario 2: Masterful Rabbit Escape (Catch Failure, Guess Success)</strong><br>Rabbit wins their bet x3. Foxes lose their bets.</li>
+                                <li><strong>Scenario 3: A Contested Outcome (Catch Success, Guess Success)</strong><br>Bonuses are cancelled. Everyone gets their bets back.</li>
+                                <li><strong>Scenario 4: Total Failure (Catch Failure, Guess Failure)</strong><br>Nobody wins. All bets are lost and removed from the game.</li>
+                            </ul>
+                            <h3>4. End of the Game</h3>
+                            <p>The game ends if a player reaches 25 🥕 carrots, a player's score hits 0, or after 10 rounds. The player with the highest score wins.</p>
+                        </div>
+                    </details>
+                </div>
             </div>
 
             <!-- GAME SCREEN (Container for all active game phases) -->
@@ -746,7 +801,7 @@
                             <div id="vote-results-content">
                                 <!-- Content generated by JS -->
                             </div>
-                            <button id="continue-after-votes-btn" class="btn">Reveal the Weasel!</button>
+                            <button id="continue-after-votes-btn" class="btn">Reveal the Rabbit!</button>
                         </div>
                     </div>
                     <!-- Weasel Reveal Screen -->
@@ -756,14 +811,14 @@
                             <div id="weasel-reveal-content">
                                 <!-- Content generated by JS -->
                             </div>
-                            <button id="continue-to-guess-btn" class="btn">Continue to Weasel's Guess</button>
+                            <button id="continue-to-guess-btn" class="btn">Continue to Rabbit's Guess</button>
                         </div>
                     </div>
                     <!-- Weasel Guess Screen -->
                     <div id="weasel-guess-screen" class="screen">
                         <div class="card">
-                            <h2 id="weasel-guess-title">🐭 Weasel's Final Guess</h2>
-                            <p id="weasel-guess-instruction">The Weasel must now guess the secret word from the grid below. Everyone can watch!</p>
+                            <h2 id="weasel-guess-title">🐰 Rabbit's Final Guess</h2>
+                            <p id="weasel-guess-instruction">The Rabbit must now guess the secret word from the grid below. Everyone can watch!</p>
                             <div id="weasel-guess-grid" class="word-grid"></div>
                             <button id="submit-weasel-guess-btn" class="btn" style="display: none;">Submit Guess</button>
                         </div>
@@ -787,39 +842,6 @@
                 </div>
             </div>
             
-            <div id="rules-container">
-                <details>
-                    <summary>Game Rules</summary>
-                    <div id="rules-content">
-                        <h3>1. Game Overview</h3>
-                        <p>In Word Weasel, players are divided into two secret teams each round: the <strong>Owls</strong>, who know a secret word, and a single <strong>Weasel</strong>, who is left in the dark. The goal is to be the first to 25 🪵 twigs.</p>
-                        <ul>
-                            <li><strong>Players:</strong> 4+</li>
-                            <li><strong>Roles:</strong> 1 Weasel, rest Owls</li>
-                            <li><strong>Starting Twigs:</strong> 10 🪵 per player</li>
-                            <li><strong>Bet Range:</strong> 1–3 🪵 twigs</li>
-                        </ul>
-                        <h3>2. The Flow of a Round</h3>
-                        <ol>
-                            <li><strong>The Word Grid Reveal (Pass the Phone):</strong> The app privately shows each player the 3x6 Word Grid. Owls see the Secret Word highlighted; the Weasel does not.</li>
-                            <li><strong>Broad Clue Round (Verbal):</strong> Each player gives a single-word or short-phrase clue out loud.</li>
-                            <li><strong>The Wager:</strong> All players secretly bet 🪵 twigs. Owls bet on catching the Weasel. The Weasel bets on guessing the word.</li>
-                            <li><strong>Specific Clue Round (Verbal):</strong> Each player gives a second, more specific clue out loud.</li>
-                            <li><strong>The Verdict:</strong> All players vote on who the Weasel is. The Weasel secretly guesses the word from the grid.</li>
-                        </ol>
-                        <h3>3. Scoring: The Interdependent Payout</h3>
-                        <p>Payouts depend on two things: Did the Owls catch the Weasel? (<strong>Catch Success</strong>) And did the Weasel guess the word? (<strong>Guess Success</strong>). A <strong>2x Sabotage Bonus</strong> is applied if your team succeeds AND the other team fails.</p>
-                        <ul>
-                            <li><strong>Scenario 1: Decisive Owl Victory (Catch Success, Guess Failure)</strong><br>Owls win their bets x2. Weasel loses their bet.</li>
-                            <li><strong>Scenario 2: Masterful Weasel Victory (Catch Failure, Guess Success)</strong><br>Weasel wins their bet x3. Owls lose their bets.</li>
-                            <li><strong>Scenario 3: A Contested Outcome (Catch Success, Guess Success)</strong><br>Bonuses are cancelled. Everyone gets their bets back.</li>
-                            <li><strong>Scenario 4: Total Failure (Catch Failure, Guess Failure)</strong><br>Nobody wins. All bets are lost and removed from the game.</li>
-                        </ul>
-                        <h3>4. End of the Game</h3>
-                        <p>The game ends if a player reaches 25 🪵 twigs, a player's score hits 0, or after 10 rounds. The player with the highest score wins.</p>
-                    </div>
-                </details>
-            </div>
         </main>
     </div>
 
@@ -882,7 +904,388 @@
             "Famous Landmarks": ["Eiffel Tower", "Statue of Liberty", "Great Wall", "Colosseum", "Taj Mahal", "Machu Picchu", "Pyramids of Giza", "Sydney Opera House", "Big Ben", "Christ the Redeemer", "Acropolis", "Stonehenge", "Mount Rushmore", "Burj Khalifa", "Petra", "Angkor Wat", "St. Basil's Cathedral", "Golden Gate Bridge"],
             "Movie Titles": ["The Godfather", "Pulp Fiction", "Forrest Gump", "The Matrix", "Inception", "Titanic", "Jurassic Park", "Star Wars", "The Avengers", "Jaws", "E.T.", "Back to the Future", "The Lion King", "Finding Nemo", "Toy Story", "Casablanca", "Psycho", "The Wizard of Oz"],
             "Types of Fruit": ["Apple", "Banana", "Orange", "Strawberry", "Grape", "Watermelon", "Pineapple", "Mango", "Peach", "Cherry", "Blueberry", "Raspberry", "Kiwi", "Lemon", "Avocado", "Pomegranate", "Coconut", "Pear"],
-            "Animals": ["Lion", "Tiger", "Elephant", "Giraffe", "Zebra", "Kangaroo", "Penguin", "Dolphin", "Shark", "Eagle", "Owl", "Bear", "Wolf", "Fox", "Monkey", "Gorilla", "Hippo", "Crocodile"]
+            "Animals": ["Lion", "Tiger", "Elephant", "Giraffe", "Zebra", "Kangaroo", "Penguin", "Dolphin", "Shark", "Eagle", "Owl", "Bear", "Wolf", "Fox", "Monkey", "Gorilla", "Hippo", "Crocodile"],
+            "Entertainment & Media": [
+                "Film",
+                "Cinema",
+                "Podcast",
+                "Sitcom",
+                "Standup",
+                "Musical",
+                "Trailer",
+                "Binge",
+                "Sequel",
+                "Animated",
+                "Director",
+                "Soundtrack",
+                "Ratings",
+                "Episode",
+                "Premiere",
+                "Documentary",
+                "Studio",
+                "Karaoke"
+            ],
+            "Nature & Science": [
+                "Volcano",
+                "Coral",
+                "Meteor",
+                "Gravity",
+                "Photosynthesis",
+                "Galaxy",
+                "Fungus",
+                "Tornado",
+                "Magnetism",
+                "Oasis",
+                "Condensation",
+                "Eclipse",
+                "Glacier",
+                "Neuron",
+                "Plateau",
+                "Mangrove",
+                "Chlorophyll",
+                "Fossil"
+            ],
+            "Food & Cooking": [
+                "Sauté",
+                "Marinate",
+                "Garnish",
+                "Broccoli",
+                "Truffle",
+                "Whisk",
+                "Simmer",
+                "Ferment",
+                "Baguette",
+                "Omelette",
+                "Seasoning",
+                "Pastry",
+                "Mince",
+                "Al dente",
+                "Stock",
+                "Zest",
+                "Glaze",
+                "Stew"
+            ],
+            "Sports & Activities": [
+                "Cycling",
+                "Archery",
+                "Skateboard",
+                "Marathon",
+                "Curling",
+                "Gymnastics",
+                "Kayaking",
+                "Yoga",
+                "Climbing",
+                "Darts",
+                "Surfing",
+                "Triathlon",
+                "Boxing",
+                "Pilates",
+                "Fencing",
+                "Baseball",
+                "Soccer",
+                "Cricket"
+            ],
+            "History & Culture": [
+                "Renaissance",
+                "Dynasty",
+                "Monarch",
+                "Colosseum",
+                "Architecture",
+                "Pharaoh",
+                "Treaty",
+                "Revolution",
+                "Folklore",
+                "Mythology",
+                "Expedition",
+                "Artifact",
+                "Empire",
+                "Constitution",
+                "Siege",
+                "Pilgrimage",
+                "Heritage",
+                "Tradition"
+            ],
+            "Technology & Modern Life": [
+                "Encryption",
+                "Algorithm",
+                "Blockchain",
+                "Drone",
+                "Smartphone",
+                "Cloud",
+                "App",
+                "Wearable",
+                "Bandwidth",
+                "Router",
+                "WiFi",
+                "Virtual Reality",
+                "Cookie",
+                "Firmware",
+                "Hashtag",
+                "Biometric",
+                "Autopilot",
+                "Nanobot"
+            ],
+            "Travel & Geography": [
+                "Archipelago",
+                "Peninsula",
+                "Savannah",
+                "Harbor",
+                "Highway",
+                "Canyon",
+                "Desert",
+                "Lagoon",
+                "Capital",
+                "Route",
+                "Tourist",
+                "Cruise",
+                "Backpacking",
+                "Passport",
+                "Itinerary",
+                "Baggage",
+                "Monument",
+                "Border"
+            ],
+            "Arts & Creative": [
+                "Watercolor",
+                "Sculpture",
+                "Mosaic",
+                "Graffiti",
+                "Collage",
+                "Origami",
+                "Improv",
+                "Chorus",
+                "Sonnet",
+                "Abstract",
+                "Portrait",
+                "Gallery",
+                "Easel",
+                "Stencil",
+                "Ballet",
+                "Opera",
+                "Clay",
+                "Drama"
+            ],
+            "Actors": [
+                "Leonardo DiCaprio",
+                "Tom Hanks",
+                "Denzel Washington",
+                "Brad Pitt",
+                "Robert Downey Jr.",
+                "Will Smith",
+                "Johnny Depp",
+                "George Clooney",
+                "Matthew McConaughey",
+                "Chris Evans",
+                "Hugh Jackman",
+                "Keanu Reeves",
+                "Ryan Gosling",
+                "Samuel L. Jackson",
+                "Joaquin Phoenix",
+                "Eddie Murphy",
+                "Tom Cruise",
+                "Daniel Day-Lewis"
+            ],
+            "Actresses": [
+                "Meryl Streep",
+                "Scarlett Johansson",
+                "Natalie Portman",
+                "Julia Roberts",
+                "Angelina Jolie",
+                "Emma Stone",
+                "Jennifer Lawrence",
+                "Sandra Bullock",
+                "Kate Winslet",
+                "Anne Hathaway",
+                "Nicole Kidman",
+                "Charlize Theron",
+                "Reese Witherspoon",
+                "Viola Davis",
+                "Halle Berry",
+                "Michelle Williams",
+                "Emma Watson",
+                "Keira Knightley"
+            ],
+            "Singers": [
+                "Beyoncé",
+                "Taylor Swift",
+                "Ed Sheeran",
+                "Adele",
+                "Bruno Mars",
+                "Rihanna",
+                "Justin Bieber",
+                "Lady Gaga",
+                "Ariana Grande",
+                "Elton John",
+                "Shawn Mendes",
+                "Billie Eilish",
+                "Drake",
+                "Sam Smith",
+                "Post Malone",
+                "P!nk",
+                "Katy Perry",
+                "John Legend"
+            ],
+            "Bands": [
+                "The Beatles",
+                "Queen",
+                "Coldplay",
+                "Fleetwood Mac",
+                "Nirvana",
+                "Imagine Dragons",
+                "Metallica",
+                "U2",
+                "Radiohead",
+                "The Rolling Stones",
+                "Red Hot Chili Peppers",
+                "Maroon 5",
+                "Foo Fighters",
+                "Linkin Park",
+                "The Who",
+                "Pink Floyd",
+                "Green Day",
+                "Arctic Monkeys"
+            ],
+            "Countries": [
+                "United States",
+                "Canada",
+                "Mexico",
+                "Brazil",
+                "United Kingdom",
+                "France",
+                "Germany",
+                "Italy",
+                "Spain",
+                "Japan",
+                "China",
+                "India",
+                "Australia",
+                "Russia",
+                "South Africa",
+                "Egypt",
+                "Argentina",
+                "Sweden"
+            ],
+            "Cities": [
+                "New York",
+                "London",
+                "Paris",
+                "Tokyo",
+                "Sydney",
+                "Los Angeles",
+                "Rome",
+                "Berlin",
+                "Toronto",
+                "Dubai",
+                "Barcelona",
+                "Mumbai",
+                "Chicago",
+                "Shanghai",
+                "Buenos Aires",
+                "Cape Town",
+                "Moscow",
+                "Amsterdam"
+            ],
+            "Mythical Creatures": [
+                "Dragon",
+                "Unicorn",
+                "Phoenix",
+                "Mermaid",
+                "Centaur",
+                "Griffin",
+                "Troll",
+                "Fairy",
+                "Goblin",
+                "Kraken",
+                "Cyclops",
+                "Yeti",
+                "Elf",
+                "Werewolf",
+                "Vampire",
+                "Gnome",
+                "Hydra",
+                "Basilisk"
+            ],
+            "Musical Instruments": [
+                "Piano",
+                "Violin",
+                "Guitar",
+                "Trumpet",
+                "Drums",
+                "Saxophone",
+                "Flute",
+                "Cello",
+                "Clarinet",
+                "Harp",
+                "Trombone",
+                "Accordion",
+                "Banjo",
+                "Oboe",
+                "Mandolin",
+                "Synthesizer",
+                "Tuba",
+                "Xylophone"
+            ],
+            "Clothing & Fashion": [
+                "T-shirt",
+                "Jeans",
+                "Blazer",
+                "Sneakers",
+                "Scarf",
+                "Fedora",
+                "Dress",
+                "Skirt",
+                "Suit",
+                "Hoodie",
+                "Sandals",
+                "Necklace",
+                "Bracelet",
+                "Sunglasses",
+                "Boots",
+                "Tie",
+                "Gloves",
+                "Jacket"
+            ],
+            "Occupations": [
+                "Teacher",
+                "Doctor",
+                "Engineer",
+                "Chef",
+                "Pilot",
+                "Artist",
+                "Carpenter",
+                "Farmer",
+                "Lawyer",
+                "Nurse",
+                "Firefighter",
+                "Police Officer",
+                "Scientist",
+                "Musician",
+                "Architect",
+                "Plumber",
+                "Dentist",
+                "Journalist"
+            ],
+            "Toys & Games": [
+                "Lego",
+                "Yo-yo",
+                "Rubik's Cube",
+                "Teddy Bear",
+                "Jigsaw Puzzle",
+                "Frisbee",
+                "Kite",
+                "Play-Doh",
+                "Action Figure",
+                "Doll",
+                "Marbles",
+                "Hot Wheels",
+                "Etch-a-Sketch",
+                "Slinky",
+                "Chess Set",
+                "Card Deck",
+                "Nerf Gun",
+                "Dominoes"
+            ]
+
         };
 
         // --- GAME LOGIC ---
@@ -895,8 +1298,8 @@
                 players: playerNames.map(name => ({
                     name: name,
                     score: 10,
-                    weaselPoints: 0,
-                    isWeasel: false,
+                    rabbitPoints: 0,
+                    isRabbit: false,
                     bet: 0,
                     vote: null, // index of voted player
                 })),
@@ -906,9 +1309,10 @@
                 currentPlayerIndex: 0,
                 wordGrid: [],
                 secretWord: '',
-                weaselIndex: -1,
-                weaselGuess: '',
+                rabbitIndex: -1,
+                rabbitGuess: '',
                 votes: {},
+                recentThemes: [], // Track last 5 themes to avoid repetition
             };
             
             startNewRound();
@@ -923,19 +1327,31 @@
 
             // Reset round-specific data
             gameState.players.forEach(p => {
-                p.isWeasel = false;
+                p.isRabbit = false;
                 p.bet = 0;
                 p.vote = null;
             });
-            gameState.weaselGuess = '';
+            gameState.rabbitGuess = '';
             gameState.votes = {};
 
             // Assign roles and word
-            gameState.weaselIndex = Math.floor(Math.random() * gameState.players.length);
-            gameState.players[gameState.weaselIndex].isWeasel = true;
+            gameState.rabbitIndex = Math.floor(Math.random() * gameState.players.length);
+            gameState.players[gameState.rabbitIndex].isRabbit = true;
 
-            const themes = Object.keys(WORD_LISTS);
-            const randomTheme = themes[Math.floor(Math.random() * themes.length)];
+            // Select theme avoiding recent ones
+            const allThemes = Object.keys(WORD_LISTS);
+            const availableThemes = allThemes.filter(theme => !gameState.recentThemes.includes(theme));
+            
+            // If all themes have been used recently (shouldn't happen with 5-round tracking), reset the recent themes
+            const themesToChooseFrom = availableThemes.length > 0 ? availableThemes : allThemes;
+            const randomTheme = themesToChooseFrom[Math.floor(Math.random() * themesToChooseFrom.length)];
+            
+            // Update recent themes list
+            gameState.recentThemes.push(randomTheme);
+            if (gameState.recentThemes.length > 5) {
+                gameState.recentThemes.shift(); // Remove oldest theme if we have more than 5
+            }
+            
             const words = [...WORD_LISTS[randomTheme]];
             gameState.wordGrid = words;
             gameState.secretWord = words[Math.floor(Math.random() * words.length)];
@@ -955,7 +1371,7 @@
         }
         
         function advancePhase() {
-            const phaseOrder = ['reveal', 'clue1', 'wager', 'clue2', 'verdict', 'voteResults', 'weaselReveal', 'weaselGuess', 'scoring'];
+            const phaseOrder = ['reveal', 'transition-clue1', 'clue1', 'wager', 'transition-clue2', 'clue2', 'verdict', 'voteResults', 'weaselReveal', 'weaselGuess', 'scoring'];
             const currentPhaseIndex = phaseOrder.indexOf(gameState.phase);
             if (currentPhaseIndex !== -1 && currentPhaseIndex < phaseOrder.length - 1) {
                 gameState.phase = phaseOrder[currentPhaseIndex + 1];
@@ -971,6 +1387,13 @@
             const player = gameState.players[gameState.currentPlayerIndex];
             
             switch(gameState.phase) {
+                case 'transition-clue1':
+                case 'transition-clue2':
+                    // No input needed for transitions, just advance to the actual clue phase
+                    const actualPhase = gameState.phase.replace('transition-', '');
+                    gameState.phase = actualPhase;
+                    updateUI();
+                    return;
                 case 'clue1':
                 case 'clue2':
                     // No input needed, just proceed
@@ -978,9 +1401,9 @@
                 case 'wager':
                     const betInput = document.getElementById('bet-input');
                     const betAmount = parseInt(betInput.value);
-                    if (isNaN(betAmount) || betAmount < 1) { alert("You must bet at least 1 🪵 twig."); return; }
-                    if (betAmount > 3 && player.score > 3) { alert("You can bet a maximum of 3 🪵 twigs."); return; }
-                    if (betAmount > player.score) { alert("You cannot bet more 🪵 twigs than you have."); return; }
+                    if (isNaN(betAmount) || betAmount < 1) { alert("You must bet at least 1 🥕 carrot."); return; }
+                    if (betAmount > 3 && player.score > 3) { alert("You can bet a maximum of 3 🥕 carrots."); return; }
+                    if (betAmount > player.score) { alert("You cannot bet more 🥕 carrots than you have."); return; }
                     player.bet = betAmount;
                     break;
                 case 'verdict':
@@ -1065,9 +1488,9 @@
         }
         
         function showWeaselReveal() {
-            const weasel = gameState.players[gameState.weaselIndex];
+            const rabbit = gameState.players[gameState.rabbitIndex];
             const accusedIndex = gameState.accusedIndex;
-            const catchSuccess = accusedIndex === gameState.weaselIndex;
+            const catchSuccess = accusedIndex === gameState.rabbitIndex;
             
             let revealHTML = '';
             
@@ -1077,7 +1500,7 @@
                 revealHTML += `<div style="margin-bottom: var(--spacing-xl);">`;
                 revealHTML += `<h3 style="text-align: center; margin-bottom: var(--spacing-lg); color: var(--text-secondary);">The Vote Results</h3>`;
                 revealHTML += `<div style="background: var(--neutral-200); padding: var(--spacing-lg); border-radius: var(--border-radius); text-align: center; margin-bottom: var(--spacing-lg);">`;
-                revealHTML += `<p style="margin-bottom: var(--spacing-sm);">The group accused:</p>`;
+                revealHTML += `<p style="margin-bottom: var(--spacing-sm);">The pack accused:</p>`;
                 revealHTML += `<p style="font-size: 1.2em; font-weight: 600; color: var(--primary-color);">${accusedPlayer.name}</p>`;
                 revealHTML += `</div>`;
                 revealHTML += `</div>`;
@@ -1085,18 +1508,18 @@
                 revealHTML += `<div style="margin-bottom: var(--spacing-xl);">`;
                 revealHTML += `<h3 style="text-align: center; margin-bottom: var(--spacing-lg); color: var(--text-secondary);">The Truth</h3>`;
                 revealHTML += `<div style="background: var(--secondary-gradient); color: var(--text-on-secondary); padding: var(--spacing-lg); border-radius: var(--border-radius); text-align: center; margin-bottom: var(--spacing-lg);">`;
-                revealHTML += `<p style="margin-bottom: var(--spacing-sm);">The actual Weasel was:</p>`;
-                revealHTML += `<p style="font-size: 1.2em; font-weight: 700;">🐭 ${weasel.name}</p>`;
+                revealHTML += `<p style="margin-bottom: var(--spacing-sm);">The actual Rabbit was:</p>`;
+                revealHTML += `<p style="font-size: 1.2em; font-weight: 700;">🐰 ${rabbit.name}</p>`;
                 revealHTML += `</div>`;
                 revealHTML += `</div>`;
                 
                 if (catchSuccess) {
                     revealHTML += `<div style="background: var(--accent-gradient); color: var(--text-on-accent); padding: var(--spacing-md); border-radius: var(--border-radius); text-align: center; font-weight: 600;">`;
-                    revealHTML += `✅ The Owls successfully caught the Weasel!`;
+                    revealHTML += `✅ The Foxes successfully caught the Rabbit!`;
                     revealHTML += `</div>`;
                 } else {
                     revealHTML += `<div style="background: var(--warning-gradient); color: var(--text-on-warning); padding: var(--spacing-md); border-radius: var(--border-radius); text-align: center; font-weight: 600;">`;
-                    revealHTML += `❌ The Weasel escaped detection`;
+                    revealHTML += `❌ The Rabbit escaped the fox pack`;
                     revealHTML += `</div>`;
                 }
             } else {
@@ -1110,13 +1533,13 @@
                 revealHTML += `<div style="margin-bottom: var(--spacing-xl);">`;
                 revealHTML += `<h3 style="text-align: center; margin-bottom: var(--spacing-lg); color: var(--text-secondary);">The Truth</h3>`;
                 revealHTML += `<div style="background: var(--secondary-gradient); color: var(--text-on-secondary); padding: var(--spacing-lg); border-radius: var(--border-radius); text-align: center; margin-bottom: var(--spacing-lg);">`;
-                revealHTML += `<p style="margin-bottom: var(--spacing-sm);">The Weasel was:</p>`;
-                revealHTML += `<p style="font-size: 1.2em; font-weight: 700;">🐭 ${weasel.name}</p>`;
+                revealHTML += `<p style="margin-bottom: var(--spacing-sm);">The Rabbit was:</p>`;
+                revealHTML += `<p style="font-size: 1.2em; font-weight: 700;">🐰 ${rabbit.name}</p>`;
                 revealHTML += `</div>`;
                 revealHTML += `</div>`;
                 
                 revealHTML += `<div style="background: var(--warning-gradient); color: var(--text-on-warning); padding: var(--spacing-md); border-radius: var(--border-radius); text-align: center; font-weight: 600;">`;
-                revealHTML += `❌ The Weasel escaped due to voting confusion`;
+                revealHTML += `❌ The Rabbit escaped due to voting confusion`;
                 revealHTML += `</div>`;
             }
             
@@ -1124,15 +1547,15 @@
         }
         
         function setupWeaselGuess() {
-            const weasel = gameState.players[gameState.weaselIndex];
-            gameInfo.weaselGuessTitle.textContent = `🐭 ${weasel.name}'s Final Guess`;
-            gameInfo.weaselGuessInstruction.textContent = `${weasel.name} (the Weasel) must now guess the secret word. Everyone can watch!`;
+            const rabbit = gameState.players[gameState.rabbitIndex];
+            gameInfo.weaselGuessTitle.textContent = `🐰 ${rabbit.name}'s Final Guess`;
+            gameInfo.weaselGuessInstruction.textContent = `${rabbit.name} (the Rabbit) must now guess the secret word. Everyone can watch!`;
             
             gameInfo.weaselGuessGrid.innerHTML = gameState.wordGrid.map(word => 
                 `<div class="word-cell guessable" data-word="${word}">${word}</div>`
             ).join('');
             
-            // Add click handlers for weasel guess
+            // Add click handlers for rabbit guess
             document.querySelectorAll('#weasel-guess-grid .word-cell').forEach(cell => {
                 cell.addEventListener('click', handleWeaselGuessSelection);
             });
@@ -1145,12 +1568,12 @@
                 cell.classList.remove('selected-guess');
             });
             e.target.classList.add('selected-guess');
-            gameState.weaselGuess = e.target.dataset.word;
+            gameState.rabbitGuess = e.target.dataset.word;
             gameInfo.submitWeaselGuessBtn.style.display = 'block';
         }
         
         function submitWeaselGuess() {
-            if (!gameState.weaselGuess) {
+            if (!gameState.rabbitGuess) {
                 alert("Please select a word first!");
                 return;
             }
@@ -1161,45 +1584,45 @@
         
         function calculateScores() {
             // Use the stored accused index from vote results
-            const catchSuccess = gameState.accusedIndex === gameState.weaselIndex;
+            const catchSuccess = gameState.accusedIndex === gameState.rabbitIndex;
 
             // Determine Guess Success
-            const guessSuccess = gameState.weaselGuess && gameState.weaselGuess.toLowerCase() === gameState.secretWord.toLowerCase();
+            const guessSuccess = gameState.rabbitGuess && gameState.rabbitGuess.toLowerCase() === gameState.secretWord.toLowerCase();
             
-            const weasel = gameState.players[gameState.weaselIndex];
-            const innocents = gameState.players.filter(p => !p.isWeasel);
+            const rabbit = gameState.players[gameState.rabbitIndex];
+            const foxes = gameState.players.filter(p => !p.isRabbit);
             
             const changes = gameState.players.map(p => ({ name: p.name, change: 0, oldScore: p.score }));
 
             let outcomeKey;
             
-            // Scenario 1: Only Owls win (Catch Success, Guess Failure)
+            // Scenario 1: Only Foxes win (Catch Success, Guess Failure)
             if (catchSuccess && !guessSuccess) {
-                outcomeKey = "innocent-win";
-                // Owls: Win 2x their stake for successful catch bet
-                innocents.forEach(p => {
+                outcomeKey = "fox-win";
+                // Foxes: Win 2x their stake for successful catch bet
+                foxes.forEach(p => {
                     const winnings = p.bet * 2;
                     p.score += winnings;
                     changes[gameState.players.indexOf(p)].change = winnings;
                 });
-                // Weasel: Loses their failed guess bet
-                weasel.score -= weasel.bet;
-                changes[gameState.weaselIndex].change = -weasel.bet;
+                // Rabbit: Loses their failed guess bet
+                rabbit.score -= rabbit.bet;
+                changes[gameState.rabbitIndex].change = -rabbit.bet;
             }
-            // Scenario 2: Only Weasel wins (Catch Failure, Guess Success)
+            // Scenario 2: Only Rabbit wins (Catch Failure, Guess Success)
             else if (!catchSuccess && guessSuccess) {
-                outcomeKey = "weasel-win";
-                // Weasel: Wins 3x their stake for successful guess bet
-                const weaselWinnings = weasel.bet * 3;
-                weasel.score += weaselWinnings;
-                weasel.weaselPoints += weaselWinnings;
-                changes[gameState.weaselIndex].change = weaselWinnings;
+                outcomeKey = "rabbit-win";
+                // Rabbit: Wins 3x their stake for successful guess bet
+                const rabbitWinnings = rabbit.bet * 3;
+                rabbit.score += rabbitWinnings;
+                rabbit.rabbitPoints += rabbitWinnings;
+                changes[gameState.rabbitIndex].change = rabbitWinnings;
 
-                // Owls: Lose their failed catch bets
-                innocents.forEach(p => {
-                    const innocentIndex = gameState.players.indexOf(p);
+                // Foxes: Lose their failed catch bets
+                foxes.forEach(p => {
+                    const foxIndex = gameState.players.indexOf(p);
                     p.score -= p.bet;
-                    changes[innocentIndex].change = -p.bet;
+                    changes[foxIndex].change = -p.bet;
                 });
             }
             // Scenario 3: Both sides win - Push (Catch Success, Guess Success)
@@ -1232,13 +1655,13 @@
             const highScorer = gameState.players.find(p => p.score >= 25);
             if (highScorer) {
                 gameOver = true;
-                reason = `${highScorer.name} reached 25 🪵 twigs!`;
+                reason = `${highScorer.name} reached 25 🥕 carrots!`;
             }
             
             const bankruptPlayer = gameState.players.find(p => p.score <= 0);
             if (bankruptPlayer) {
                 gameOver = true;
-                reason = `${bankruptPlayer.name} ran out of 🪵 twigs!`;
+                reason = `${bankruptPlayer.name} ran out of 🥕 carrots!`;
             }
 
             if (gameOver) {
@@ -1255,7 +1678,7 @@
             
             let winner;
             if (tiedWinners.length > 1) {
-                tiedWinners.sort((a, b) => b.weaselPoints - a.weaselPoints);
+                tiedWinners.sort((a, b) => b.rabbitPoints - a.rabbitPoints);
                 winner = tiedWinners[0];
             } else {
                 winner = winners[0];
@@ -1263,7 +1686,7 @@
             
             gameInfo.winnerAnnouncement.innerHTML = `
                 ${reason}<br>
-                <strong>The winner is ${winner.name} with ${Math.round(winner.score)} 🪵 twigs!</strong>
+                <strong>The winner is ${winner.name} with ${Math.round(winner.score)} 🥕 carrots!</strong>
             `;
             updateUI();
         }
@@ -1341,7 +1764,7 @@
             
             switchScreen('game');
             gameInfo.roundCounter.textContent = `Round ${gameState.currentRound} / ${gameState.maxRounds}`;
-            gameInfo.playerScores.innerHTML = gameState.players.map(p => `<li class="${p.isWeasel && (gameState.phase === 'scoring' || gameState.phase === 'gameOver') ? 'weasel-score' : ''}">${p.name}: ${Math.round(p.score)} 🪵</li>`).join('');
+            gameInfo.playerScores.innerHTML = gameState.players.map(p => `<li class="${p.isRabbit && (gameState.phase === 'scoring' || gameState.phase === 'gameOver') ? 'weasel-score' : ''}">${p.name}: ${Math.round(p.score)} 🥕</li>`).join('');
 
             Object.values(screens).forEach(s => {
                 if (s.parentElement === document.getElementById('game-phase-container')) s.classList.remove('active');
@@ -1363,8 +1786,10 @@
                     gameInfo.passToPlayerName.textContent = `${phaseNames[phaseType]}: Pass to ${player.name}`;
                     break;
                     
+                case 'transition-clue1':
                 case 'clue1':
                 case 'wager':
+                case 'transition-clue2':
                 case 'clue2':
                 case 'verdict':
                     screens.mainPhase.classList.add('active');
@@ -1413,13 +1838,13 @@
             screens.reveal.classList.add('active');
             
             const player = gameState.players[gameState.currentPlayerIndex];
-            gameInfo.revealRoleTitle.textContent = player.isWeasel ? "You are the WEASEL!" : "You are an OWL";
-            gameInfo.revealInstruction.textContent = player.isWeasel 
+            gameInfo.revealRoleTitle.textContent = player.isRabbit ? "You are the RABBIT!" : "You are a FOX";
+            gameInfo.revealInstruction.textContent = player.isRabbit 
                 ? "You DON'T know the secret word. Blend in and try to figure it out from the clues!"
-                : "Your team's secret word is highlighted below. Give clues to help your fellow Owls find the Weasel without giving the word away!";
+                : "Your pack's secret word is highlighted below. Give clues to help your fellow Foxes find the Rabbit without giving the word away!";
             
             gameInfo.revealWordGrid.innerHTML = gameState.wordGrid.map(word => 
-                `<div class="word-cell ${!player.isWeasel && word === gameState.secretWord ? 'secret' : ''}">${word}</div>`
+                `<div class="word-cell ${!player.isRabbit && word === gameState.secretWord ? 'secret' : ''}">${word}</div>`
             ).join('');
         }
         
@@ -1431,8 +1856,14 @@
             stopTimer();
             
             switch(gameState.phase) {
+                case 'transition-clue1':
+                    title = `Get Ready for First Clue: ${player.name}'s Turn`;
+                    instruction = "Prepare your BROAD clue. When you are ready, press 'Begin' and you'll have 20 seconds to give your clue.";
+                    inputHTML = ``;
+                    buttonText = "Begin";
+                    break;
                 case 'clue1':
-                    title = `Clue 1: ${player.name}'s Turn`;
+                    title = `First Clue: ${player.name}'s Turn`;
                     instruction = "Give your BROAD clue out loud to the group. You have 20 seconds. When you are finished, press 'Continue'.";
                     inputHTML = ``;
                     buttonText = "Continue";
@@ -1441,17 +1872,23 @@
                     break;
                 case 'wager':
                     title = `Wager: ${player.name}'s Turn`;
-                    if (player.isWeasel) {
-                        instruction = `You are the Weasel. Bet on your ability to guess the secret word. Your current score: ${Math.round(player.score)} 🪵 twigs`;
+                    if (player.isRabbit) {
+                        instruction = `You are the Rabbit. Bet on your ability to guess the secret word. Your current score: ${Math.round(player.score)} 🥕 carrots`;
                     } else {
-                        instruction = `You are an Owl. Bet on your team's ability to catch the Weasel. Your current score: ${Math.round(player.score)} 🪵 twigs`;
+                        instruction = `You are a Fox. Bet on your pack's ability to catch the Rabbit. Your current score: ${Math.round(player.score)} 🥕 carrots`;
                     }
-                    inputHTML = `<input type="number" id="bet-input" min="1" max="${Math.min(3, player.score)}" placeholder="Bet 1-3 🪵 twigs">`;
+                    inputHTML = `<input type="number" id="bet-input" min="1" max="${Math.min(3, player.score)}" placeholder="Bet 1-3 🥕 carrots">`;
                     buttonText = "Submit Bet";
                     break;
+                case 'transition-clue2':
+                    title = `Get Ready for Second Clue: ${player.name}'s Turn`;
+                    instruction = "Prepare your second clue. When you are ready, press 'Begin' and you'll have 20 seconds to give your clue.";
+                    inputHTML = ``;
+                    buttonText = "Begin";
+                    break;
                 case 'clue2':
-                    title = `Clue 2: ${player.name}'s Turn`;
-                    instruction = "Give your SPECIFIC clue out loud to the group. You have 20 seconds. When you are finished, press 'Continue'.";
+                    title = `Second Clue: ${player.name}'s Turn`;
+                    instruction = "Give your second clue out loud to the group. You have 20 seconds. When you are finished, press 'Continue'.";
                     inputHTML = ``;
                     buttonText = "Continue";
                     // Start 20-second timer for clue phase
@@ -1459,7 +1896,7 @@
                     break;
                 case 'verdict':
                     title = `Verdict: ${player.name}'s Turn`;
-                    instruction = "All clues have been given. Now, vote for who you think the Weasel is.";
+                    instruction = "All clues have been given. Now, vote for who you think the Rabbit is.";
                     inputHTML = `<ul id="vote-options">` + gameState.players
                         .map((p, i) => `<li class="vote-option" data-index="${i}">${p.name}</li>`)
                         .join('') + `</ul>`;
@@ -1493,32 +1930,32 @@
 
         function displayScoringSummary(outcomeKey, results, changes) {
             const outcomeTitles = {
-                "innocent-win": "Owls Win!",
-                "weasel-win": "Weasel Wins!",
+                "fox-win": "Foxes Win!",
+                "rabbit-win": "Rabbit Wins!",
                 "contested-win": "Push - Both Sides Win!",
                 "total-failure": "Total Failure - Everyone Loses!"
             };
 
             const outcomeDescriptions = {
-                "innocent-win": "The Owls caught the Weasel, and the Weasel failed to guess the word. <strong>Owls win 2× their catch bets!</strong>",
-                "weasel-win": "The Weasel escaped detection and guessed the secret word! <strong>The Weasel wins 3× their guess bet!</strong>",
-                "contested-win": "The Owls caught the Weasel, but the Weasel ALSO guessed the word correctly. <strong>Everyone pushes and gets back their original bet (1×).</strong>",
-                "total-failure": "The Owls failed to catch the Weasel, AND the Weasel failed to guess the word. <strong>Everyone loses their bets!</strong>"
+                "fox-win": "The Foxes caught the Rabbit, and the Rabbit failed to guess the word. <strong>Foxes win 2× their catch bets!</strong>",
+                "rabbit-win": "The Rabbit escaped detection and guessed the secret word! <strong>The Rabbit wins 3× their guess bet!</strong>",
+                "contested-win": "The Foxes caught the Rabbit, but the Rabbit ALSO guessed the word correctly. <strong>Everyone pushes and gets back their original bet (1×).</strong>",
+                "total-failure": "The Foxes failed to catch the Rabbit, AND the Rabbit failed to guess the word. <strong>Everyone loses their bets!</strong>"
             };
 
             const scoreChanges = changes.map(c => {
                 const change = Math.round(c.change * 100) / 100;
                 const changeClass = change > 0 ? 'score-gain' : (change < 0 ? 'score-loss' : '');
                 const sign = change > 0 ? '+' : '';
-                return `<li><span>${c.name}</span> <strong class="${changeClass}">${sign}${change} 🪵 twigs</strong> ( ${Math.round(c.oldScore)} → ${Math.round(c.oldScore + change)} )</li>`;
+                return `<li><span>${c.name}</span> <strong class="${changeClass}">${sign}${change} 🥕 carrots</strong> ( ${Math.round(c.oldScore)} → ${Math.round(c.oldScore + change)} )</li>`;
             }).join('');
 
             gameInfo.scoringSummary.innerHTML = `
                 <h2 class="outcome-title ${outcomeKey}">${outcomeTitles[outcomeKey]}</h2>
                 <p><strong>The Secret Word was:</strong> ${gameState.secretWord}</p>
-                <p><strong>The Weasel was:</strong> ${gameState.players[gameState.weaselIndex].name}</p>
+                <p><strong>The Rabbit was:</strong> ${gameState.players[gameState.rabbitIndex].name}</p>
                 <p><strong>Catch Attempt:</strong> ${results.catchSuccess ? 'SUCCESS' : 'FAILURE'}</p>
-                <p><strong>Weasel's Guess:</strong> "${gameState.weaselGuess || 'No Guess Made'}" (${results.guessSuccess ? 'SUCCESS' : 'FAILURE'})</p>
+                <p><strong>Rabbit's Guess:</strong> "${gameState.rabbitGuess || 'No Guess Made'}" (${results.guessSuccess ? 'SUCCESS' : 'FAILURE'})</p>
                 <hr style="margin: 15px 0; border-color: var(--primary-color);">
                 <p>${outcomeDescriptions[outcomeKey]}</p>
                 <h3>Score Changes:</h3>
