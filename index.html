@@ -471,11 +471,11 @@
             margin-bottom: var(--spacing-xl);
         }
 
-        .innocent-win { 
+        .fox-win { 
             background: var(--accent-color);
             color: var(--text-on-color);
         }
-        .weasel-win { 
+        .rabbit-win { 
             background: var(--warning-color);
             color: var(--text-on-color);
         }
@@ -1870,16 +1870,27 @@
                     <img src="bunnycatch.png" alt="Bunny Caught" style="max-width: 200px; height: auto; border-radius: var(--border-radius-md);">
                 </div>` : '';
 
-            // Add bunny run image for rabbit wins
             const bunnyRunImage = outcomeKey === "rabbit-win" ? 
                 `<div style="text-align: center; margin: var(--spacing-xl) 0;">
                     <img src="bunnyrun.png" alt="Bunny Escaped" style="max-width: 200px; height: auto; border-radius: var(--border-radius-md);">
+                </div>` : '';
+
+            const bunnyFoxWinImage = outcomeKey === "contested-win" ? 
+                `<div style="text-align: center; margin: var(--spacing-xl) 0;">
+                    <img src="bunnyfoxwin.png" alt="Both Sides Win" style="max-width: 200px; height: auto; border-radius: var(--border-radius-md);">
+                </div>` : '';
+
+            const bunnyFoxLoseImage = outcomeKey === "total-failure" ? 
+                `<div style="text-align: center; margin: var(--spacing-xl) 0;">
+                    <img src="bunnyfoxlose.png" alt="Both Sides Lose" style="max-width: 200px; height: auto; border-radius: var(--border-radius-md);">
                 </div>` : '';
 
             gameInfo.scoringSummary.innerHTML = `
                 <h2 class="outcome-title ${outcomeKey}">${outcomeTitles[outcomeKey]}</h2>
                 ${bunnyCatchImage}
                 ${bunnyRunImage}
+                ${bunnyFoxWinImage}
+                ${bunnyFoxLoseImage}
                 <p><strong>The Secret Word was:</strong> ${gameState.secretWord}</p>
                 <p><strong>The Rabbit was:</strong> ${gameState.players[gameState.rabbitIndex].name}</p>
                 <p><strong>Catch Attempt:</strong> ${results.catchSuccess ? 'SUCCESS' : 'FAILURE'}</p>
@@ -1912,11 +1923,9 @@
             if (gameState.phase === 'reveal') {
                 showRevealScreen();
             } else if (gameState.phase === 'transition-wager') {
-                // Transition from wager handoff to actual wager screen
                 gameState.phase = 'wager';
                 updateUI();
             } else if (gameState.phase === 'transition-verdict') {
-                // Transition from verdict handoff to actual verdict screen
                 gameState.phase = 'verdict';
                 updateUI();
             }
@@ -1928,13 +1937,8 @@
         });
         
         gameInfo.submitActionBtn.addEventListener('click', handleSubmitAction);
-        
         gameInfo.nextRoundBtn.addEventListener('click', startNewRound);
-        
-        gameInfo.playAgainBtn.addEventListener('click', () => {
-            location.reload();
-        });
-        
+        gameInfo.playAgainBtn.addEventListener('click', () => location.reload());
         gameInfo.continueBufferBtn.addEventListener('click', continueFromBuffer);
         
         gameInfo.continueAfterVotesBtn.addEventListener('click', () => {
