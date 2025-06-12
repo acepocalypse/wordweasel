@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bluff Den - The Game</title>
+    <link rel="icon" type="image/png" href="favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Charmonman:wght@400;700&family=Cherry+Swash:wght@400;700&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -689,6 +690,21 @@
         #setup-screen.active #rules-container {
             display: block;
         }
+
+        /* Game screen header adjustments */
+        body.in-game header {
+            padding: var(--spacing-xl) var(--spacing-2xl) var(--spacing-md);
+        }
+
+        body.in-game header h1 {
+            font-size: 32px;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        body.in-game header p {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -905,387 +921,26 @@
             "Movie Titles": ["The Godfather", "Pulp Fiction", "Forrest Gump", "The Matrix", "Inception", "Titanic", "Jurassic Park", "Star Wars", "The Avengers", "Jaws", "E.T.", "Back to the Future", "The Lion King", "Finding Nemo", "Toy Story", "Casablanca", "Psycho", "The Wizard of Oz"],
             "Types of Fruit": ["Apple", "Banana", "Orange", "Strawberry", "Grape", "Watermelon", "Pineapple", "Mango", "Peach", "Cherry", "Blueberry", "Raspberry", "Kiwi", "Lemon", "Avocado", "Pomegranate", "Coconut", "Pear"],
             "Animals": ["Lion", "Tiger", "Elephant", "Giraffe", "Zebra", "Kangaroo", "Penguin", "Dolphin", "Shark", "Eagle", "Owl", "Bear", "Wolf", "Fox", "Monkey", "Gorilla", "Hippo", "Crocodile"],
-            "Entertainment & Media": [
-                "Film",
-                "Cinema",
-                "Podcast",
-                "Sitcom",
-                "Standup",
-                "Musical",
-                "Trailer",
-                "Binge",
-                "Sequel",
-                "Animated",
-                "Director",
-                "Soundtrack",
-                "Ratings",
-                "Episode",
-                "Premiere",
-                "Documentary",
-                "Studio",
-                "Karaoke"
-            ],
-            "Nature & Science": [
-                "Volcano",
-                "Coral",
-                "Meteor",
-                "Gravity",
-                "Photosynthesis",
-                "Galaxy",
-                "Fungus",
-                "Tornado",
-                "Magnetism",
-                "Oasis",
-                "Condensation",
-                "Eclipse",
-                "Glacier",
-                "Neuron",
-                "Plateau",
-                "Mangrove",
-                "Chlorophyll",
-                "Fossil"
-            ],
-            "Food & Cooking": [
-                "Sauté",
-                "Marinate",
-                "Garnish",
-                "Broccoli",
-                "Truffle",
-                "Whisk",
-                "Simmer",
-                "Ferment",
-                "Baguette",
-                "Omelette",
-                "Seasoning",
-                "Pastry",
-                "Mince",
-                "Al dente",
-                "Stock",
-                "Zest",
-                "Glaze",
-                "Stew"
-            ],
-            "Sports & Activities": [
-                "Cycling",
-                "Archery",
-                "Skateboard",
-                "Marathon",
-                "Curling",
-                "Gymnastics",
-                "Kayaking",
-                "Yoga",
-                "Climbing",
-                "Darts",
-                "Surfing",
-                "Triathlon",
-                "Boxing",
-                "Pilates",
-                "Fencing",
-                "Baseball",
-                "Soccer",
-                "Cricket"
-            ],
-            "History & Culture": [
-                "Renaissance",
-                "Dynasty",
-                "Monarch",
-                "Colosseum",
-                "Architecture",
-                "Pharaoh",
-                "Treaty",
-                "Revolution",
-                "Folklore",
-                "Mythology",
-                "Expedition",
-                "Artifact",
-                "Empire",
-                "Constitution",
-                "Siege",
-                "Pilgrimage",
-                "Heritage",
-                "Tradition"
-            ],
-            "Technology & Modern Life": [
-                "Encryption",
-                "Algorithm",
-                "Blockchain",
-                "Drone",
-                "Smartphone",
-                "Cloud",
-                "App",
-                "Wearable",
-                "Bandwidth",
-                "Router",
-                "WiFi",
-                "Virtual Reality",
-                "Cookie",
-                "Firmware",
-                "Hashtag",
-                "Biometric",
-                "Autopilot",
-                "Nanobot"
-            ],
-            "Travel & Geography": [
-                "Archipelago",
-                "Peninsula",
-                "Savannah",
-                "Harbor",
-                "Highway",
-                "Canyon",
-                "Desert",
-                "Lagoon",
-                "Capital",
-                "Route",
-                "Tourist",
-                "Cruise",
-                "Backpacking",
-                "Passport",
-                "Itinerary",
-                "Baggage",
-                "Monument",
-                "Border"
-            ],
-            "Arts & Creative": [
-                "Watercolor",
-                "Sculpture",
-                "Mosaic",
-                "Graffiti",
-                "Collage",
-                "Origami",
-                "Improv",
-                "Chorus",
-                "Sonnet",
-                "Abstract",
-                "Portrait",
-                "Gallery",
-                "Easel",
-                "Stencil",
-                "Ballet",
-                "Opera",
-                "Clay",
-                "Drama"
-            ],
-            "Actors": [
-                "Leonardo DiCaprio",
-                "Tom Hanks",
-                "Denzel Washington",
-                "Brad Pitt",
-                "Robert Downey Jr.",
-                "Will Smith",
-                "Johnny Depp",
-                "George Clooney",
-                "Matthew McConaughey",
-                "Chris Evans",
-                "Hugh Jackman",
-                "Keanu Reeves",
-                "Ryan Gosling",
-                "Samuel L. Jackson",
-                "Joaquin Phoenix",
-                "Eddie Murphy",
-                "Tom Cruise",
-                "Daniel Day-Lewis"
-            ],
-            "Actresses": [
-                "Meryl Streep",
-                "Scarlett Johansson",
-                "Natalie Portman",
-                "Julia Roberts",
-                "Angelina Jolie",
-                "Emma Stone",
-                "Jennifer Lawrence",
-                "Sandra Bullock",
-                "Kate Winslet",
-                "Anne Hathaway",
-                "Nicole Kidman",
-                "Charlize Theron",
-                "Reese Witherspoon",
-                "Viola Davis",
-                "Halle Berry",
-                "Michelle Williams",
-                "Emma Watson",
-                "Keira Knightley"
-            ],
-            "Singers": [
-                "Beyoncé",
-                "Taylor Swift",
-                "Ed Sheeran",
-                "Adele",
-                "Bruno Mars",
-                "Rihanna",
-                "Justin Bieber",
-                "Lady Gaga",
-                "Ariana Grande",
-                "Elton John",
-                "Shawn Mendes",
-                "Billie Eilish",
-                "Drake",
-                "Sam Smith",
-                "Post Malone",
-                "P!nk",
-                "Katy Perry",
-                "John Legend"
-            ],
-            "Bands": [
-                "The Beatles",
-                "Queen",
-                "Coldplay",
-                "Fleetwood Mac",
-                "Nirvana",
-                "Imagine Dragons",
-                "Metallica",
-                "U2",
-                "Radiohead",
-                "The Rolling Stones",
-                "Red Hot Chili Peppers",
-                "Maroon 5",
-                "Foo Fighters",
-                "Linkin Park",
-                "The Who",
-                "Pink Floyd",
-                "Green Day",
-                "Arctic Monkeys"
-            ],
-            "Countries": [
-                "United States",
-                "Canada",
-                "Mexico",
-                "Brazil",
-                "United Kingdom",
-                "France",
-                "Germany",
-                "Italy",
-                "Spain",
-                "Japan",
-                "China",
-                "India",
-                "Australia",
-                "Russia",
-                "South Africa",
-                "Egypt",
-                "Argentina",
-                "Sweden"
-            ],
-            "Cities": [
-                "New York",
-                "London",
-                "Paris",
-                "Tokyo",
-                "Sydney",
-                "Los Angeles",
-                "Rome",
-                "Berlin",
-                "Toronto",
-                "Dubai",
-                "Barcelona",
-                "Mumbai",
-                "Chicago",
-                "Shanghai",
-                "Buenos Aires",
-                "Cape Town",
-                "Moscow",
-                "Amsterdam"
-            ],
-            "Mythical Creatures": [
-                "Dragon",
-                "Unicorn",
-                "Phoenix",
-                "Mermaid",
-                "Centaur",
-                "Griffin",
-                "Troll",
-                "Fairy",
-                "Goblin",
-                "Kraken",
-                "Cyclops",
-                "Yeti",
-                "Elf",
-                "Werewolf",
-                "Vampire",
-                "Gnome",
-                "Hydra",
-                "Basilisk"
-            ],
-            "Musical Instruments": [
-                "Piano",
-                "Violin",
-                "Guitar",
-                "Trumpet",
-                "Drums",
-                "Saxophone",
-                "Flute",
-                "Cello",
-                "Clarinet",
-                "Harp",
-                "Trombone",
-                "Accordion",
-                "Banjo",
-                "Oboe",
-                "Mandolin",
-                "Synthesizer",
-                "Tuba",
-                "Xylophone"
-            ],
-            "Clothing & Fashion": [
-                "T-shirt",
-                "Jeans",
-                "Blazer",
-                "Sneakers",
-                "Scarf",
-                "Fedora",
-                "Dress",
-                "Skirt",
-                "Suit",
-                "Hoodie",
-                "Sandals",
-                "Necklace",
-                "Bracelet",
-                "Sunglasses",
-                "Boots",
-                "Tie",
-                "Gloves",
-                "Jacket"
-            ],
-            "Occupations": [
-                "Teacher",
-                "Doctor",
-                "Engineer",
-                "Chef",
-                "Pilot",
-                "Artist",
-                "Carpenter",
-                "Farmer",
-                "Lawyer",
-                "Nurse",
-                "Firefighter",
-                "Police Officer",
-                "Scientist",
-                "Musician",
-                "Architect",
-                "Plumber",
-                "Dentist",
-                "Journalist"
-            ],
-            "Toys & Games": [
-                "Lego",
-                "Yo-yo",
-                "Rubik's Cube",
-                "Teddy Bear",
-                "Jigsaw Puzzle",
-                "Frisbee",
-                "Kite",
-                "Play-Doh",
-                "Action Figure",
-                "Doll",
-                "Marbles",
-                "Hot Wheels",
-                "Etch-a-Sketch",
-                "Slinky",
-                "Chess Set",
-                "Card Deck",
-                "Nerf Gun",
-                "Dominoes"
-            ]
-
+            "Entertainment & Media": ["Film", "Cinema", "Podcast", "Sitcom", "Standup", "Musical", "Trailer", "Binge", "Sequel", "Animated", "Director", "Soundtrack", "Ratings", "Episode", "Premiere", "Documentary", "Studio", "Karaoke"],
+            "Nature & Science": ["Volcano", "Coral", "Meteor", "Gravity", "Photosynthesis", "Galaxy", "Fungus", "Tornado", "Magnetism", "Oasis", "Condensation", "Eclipse", "Glacier", "Neuron", "Plateau", "Mangrove", "Chlorophyll", "Fossil"],
+            "Sports & Activities": ["Cycling", "Archery", "Skateboard", "Marathon", "Curling", "Gymnastics", "Kayaking", "Yoga", "Climbing", "Darts", "Surfing", "Triathlon", "Boxing", "Pilates", "Fencing", "Baseball", "Soccer", "Cricket"],
+            "History & Culture": ["Renaissance", "Dynasty", "Monarch", "Colosseum", "Architecture", "Pharaoh", "Treaty", "Revolution", "Folklore", "Mythology", "Expedition", "Artifact", "Empire", "Constitution", "Siege", "Pilgrimage", "Heritage", "Tradition"],
+            "Technology & Modern Life": ["Encryption", "Algorithm", "Blockchain", "Drone", "Smartphone", "Cloud", "App", "Wearable", "Bandwidth", "Router", "WiFi", "Virtual Reality", "Cookie", "Firmware", "Hashtag", "Biometric", "Autopilot", "Nanobot"],
+            "Travel & Geography": ["Archipelago", "Peninsula", "Savannah", "Harbor", "Highway", "Canyon", "Desert", "Lagoon", "Capital", "Route", "Tourist", "Cruise", "Backpacking", "Passport", "Itinerary", "Baggage", "Monument", "Border"],
+            "Arts & Creative": ["Watercolor", "Sculpture", "Mosaic", "Graffiti", "Collage", "Origami", "Improv", "Chorus", "Sonnet", "Abstract", "Portrait", "Gallery", "Easel", "Stencil", "Ballet", "Opera", "Clay", "Drama"],
+            "Actors": ["Leonardo DiCaprio", "Tom Hanks", "Denzel Washington", "Brad Pitt", "Robert Downey Jr.", "Will Smith", "Johnny Depp", "George Clooney", "Matthew McConaughey", "Chris Evans", "Hugh Jackman", "Keanu Reeves", "Ryan Gosling", "Samuel L. Jackson", "Joaquin Phoenix", "Eddie Murphy", "Tom Cruise", "Daniel Day-Lewis"],
+            "Actresses": ["Meryl Streep", "Scarlett Johansson", "Natalie Portman", "Julia Roberts", "Angelina Jolie", "Emma Stone", "Jennifer Lawrence", "Sandra Bullock", "Kate Winslet", "Anne Hathaway", "Nicole Kidman", "Charlize Theron", "Reese Witherspoon", "Viola Davis", "Halle Berry", "Michelle Williams", "Emma Watson", "Keira Knightley"],
+            "Singers": ["Beyoncé", "Taylor Swift", "Ed Sheeran", "Adele", "Bruno Mars", "Rihanna", "Justin Bieber", "Lady Gaga", "Ariana Grande", "Elton John", "Shawn Mendes", "Billie Eilish", "Drake", "Sam Smith", "Post Malone", "P!nk", "Katy Perry", "John Legend"],
+            "Bands": ["The Beatles", "Queen", "Coldplay", "Fleetwood Mac", "Nirvana", "Imagine Dragons", "Metallica", "U2", "Radiohead", "The Rolling Stones", "Red Hot Chili Peppers", "Maroon 5", "Foo Fighters", "Linkin Park", "The Who", "Pink Floyd", "Green Day", "Arctic Monkeys"],
+            "Countries": ["United States", "Canada", "Mexico", "Brazil", "United Kingdom", "France", "Germany", "Italy", "Spain", "Japan", "China", "India", "Australia", "Russia", "South Africa", "Egypt", "Argentina", "Sweden"],
+            "Cities": ["New York", "London", "Paris", "Tokyo", "Sydney", "Los Angeles", "Rome", "Berlin", "Toronto", "Dubai", "Barcelona", "Mumbai", "Chicago", "Shanghai", "Buenos Aires", "Cape Town", "Moscow", "Amsterdam"],
+            "Mythical Creatures": ["Dragon", "Unicorn", "Phoenix", "Mermaid", "Centaur", "Griffin", "Troll", "Fairy", "Goblin", "Kraken", "Cyclops", "Yeti", "Elf", "Werewolf", "Vampire", "Gnome", "Hydra", "Basilisk"],
+            "Musical Instruments": ["Piano", "Violin", "Guitar", "Trumpet", "Drums", "Saxophone", "Flute", "Cello", "Clarinet", "Harp", "Trombone", "Accordion", "Banjo", "Oboe", "Mandolin", "Synthesizer", "Tuba", "Xylophone"],
+            "Clothing & Fashion": ["T-shirt", "Jeans", "Blazer", "Sneakers", "Scarf", "Fedora", "Dress", "Skirt", "Suit", "Hoodie", "Sandals", "Necklace", "Bracelet", "Sunglasses", "Boots", "Tie", "Gloves", "Jacket"],
+            "Occupations": ["Teacher", "Doctor", "Engineer", "Chef", "Pilot", "Artist", "Carpenter", "Farmer", "Lawyer", "Nurse", "Firefighter", "Police Officer", "Scientist", "Musician", "Architect", "Plumber", "Dentist", "Journalist"],
+            "Toys & Games": ["Lego", "Yo-yo", "Rubik's Cube", "Teddy Bear", "Jigsaw Puzzle", "Frisbee", "Kite", "Play-Doh", "Action Figure", "Doll", "Marbles", "Hot Wheels", "Etch-a-Sketch", "Slinky", "Chess Set", "Card Deck", "Nerf Gun", "Dominoes"],
+            "Food & Drink": ["Pizza", "Burger", "Sushi", "Pasta", "Salad", "Ice Cream", "Chocolate", "Coffee", "Tea", "Juice", "Bread", "Cheese", "Soup", "Steak", "Tacos", "Curry", "Donut", "Pancakes"],
+            "Hobbies & Interests": ["Gardening", "Photography", "Cooking", "Reading", "Fishing", "Hiking", "Painting", "Writing", "Knitting", "Birdwatching", "Traveling", "Gaming", "Cycling", "Collecting", "Dancing", "Camping", "DIY Projects", "Music"],
         };
 
         // --- GAME LOGIC ---
@@ -1389,14 +1044,12 @@
             switch(gameState.phase) {
                 case 'transition-clue1':
                 case 'transition-clue2':
-                    // No input needed for transitions, just advance to the actual clue phase
                     const actualPhase = gameState.phase.replace('transition-', '');
                     gameState.phase = actualPhase;
                     updateUI();
                     return;
                 case 'clue1':
                 case 'clue2':
-                    // No input needed, just proceed
                     break;
                 case 'wager':
                     const betInput = document.getElementById('bet-input');
@@ -1413,10 +1066,8 @@
                     break;
             }
             
-            // Check if we need to show buffer screen between players for private phases
+            // Show buffer screen between players for private phases
             if ((gameState.phase === 'wager' || gameState.phase === 'verdict') && gameState.currentPlayerIndex < gameState.players.length - 1) {
-                // Store current phase info before going to buffer
-                gameState.previousPhase = gameState.phase;
                 gameState.phase = 'buffer';
                 updateUI();
                 return;
@@ -1426,24 +1077,20 @@
         }
         
         function continueFromBuffer() {
-            // Determine which phase to return to based on what we were doing before the buffer
-            if (gameState.currentPlayerIndex < gameState.players.length - 1) {
-                // Still have more players for the current phase
-                gameState.currentPlayerIndex++;
-                // Return to the phase we were in before the buffer
-                if (gameState.phase === 'buffer') {
-                    // Check if we have any players with bets set but not all players
-                    const playersWithBets = gameState.players.filter(p => p.bet > 0).length;
-                    const playersWithVotes = gameState.players.filter(p => p.vote !== null).length;
-                    
-                    if (playersWithBets > 0 && playersWithBets < gameState.players.length) {
-                        gameState.phase = 'wager';
-                    } else if (playersWithVotes > 0 && playersWithVotes < gameState.players.length) {
-                        gameState.phase = 'verdict';
-                    }
+            gameState.currentPlayerIndex++;
+            
+            if (gameState.currentPlayerIndex < gameState.players.length) {
+                // Continue with the same private phase for next player
+                const playersWithBets = gameState.players.filter(p => p.bet > 0).length;
+                const playersWithVotes = gameState.players.filter(p => p.vote !== null).length;
+                
+                if (playersWithBets > 0 && playersWithBets < gameState.players.length) {
+                    gameState.phase = 'wager';
+                } else if (playersWithVotes > 0 && playersWithVotes < gameState.players.length) {
+                    gameState.phase = 'verdict';
                 }
             } else {
-                // This was the last player, advance to next phase
+                // All players finished, advance to next phase
                 gameState.currentPlayerIndex = 0;
                 advancePhase();
             }
@@ -1759,10 +1406,12 @@
         function updateUI() {
             if (gameState.phase === 'setup') {
                 switchScreen('setup');
+                document.body.classList.remove('in-game');
                 return;
             }
             
             switchScreen('game');
+            document.body.classList.add('in-game');
             gameInfo.roundCounter.textContent = `Round ${gameState.currentRound} / ${gameState.maxRounds}`;
             gameInfo.playerScores.innerHTML = gameState.players.map(p => `<li class="${p.isRabbit && (gameState.phase === 'scoring' || gameState.phase === 'gameOver') ? 'weasel-score' : ''}">${p.name}: ${Math.round(p.score)} 🥕</li>`).join('');
 
