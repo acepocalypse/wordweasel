@@ -1864,8 +1864,22 @@
                 return `<li><span>${c.name}</span> <strong class="${changeClass}">${sign}${change} 🥕 carrots</strong> ( ${Math.round(c.oldScore)} → ${Math.round(c.oldScore + change)} )</li>`;
             }).join('');
 
+            // Add bunny catch image for fox wins
+            const bunnyCatchImage = outcomeKey === "fox-win" ? 
+                `<div style="text-align: center; margin: var(--spacing-xl) 0;">
+                    <img src="bunnycatch.png" alt="Bunny Caught" style="max-width: 200px; height: auto; border-radius: var(--border-radius-md);">
+                </div>` : '';
+
+            // Add bunny run image for rabbit wins
+            const bunnyRunImage = outcomeKey === "rabbit-win" ? 
+                `<div style="text-align: center; margin: var(--spacing-xl) 0;">
+                    <img src="bunnyrun.png" alt="Bunny Escaped" style="max-width: 200px; height: auto; border-radius: var(--border-radius-md);">
+                </div>` : '';
+
             gameInfo.scoringSummary.innerHTML = `
                 <h2 class="outcome-title ${outcomeKey}">${outcomeTitles[outcomeKey]}</h2>
+                ${bunnyCatchImage}
+                ${bunnyRunImage}
                 <p><strong>The Secret Word was:</strong> ${gameState.secretWord}</p>
                 <p><strong>The Rabbit was:</strong> ${gameState.players[gameState.rabbitIndex].name}</p>
                 <p><strong>Catch Attempt:</strong> ${results.catchSuccess ? 'SUCCESS' : 'FAILURE'}</p>
