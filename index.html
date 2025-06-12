@@ -1515,7 +1515,7 @@
                             <button id="increase-players" class="counter-btn" aria-label="Increase players">+</button>
                         </div>
                         <input type="hidden" id="player-count" value="4">
-                        <div class="counter-note">Minimum 4 players, maximum 10 players</div>
+                        <div class="counter-note">4-10 players</div>
                     </div>
                     <div id="player-inputs"></div>
                 </div>
@@ -2521,22 +2521,22 @@
             // Add bunny catch image for fox wins
             const bunnyCatchImage = outcomeKey === "fox-win" ? 
                 `<div style="text-align: center; margin: var(--spacing-xl) 0;">
-                    <img src="bunnycatch.png" alt="Bunny Caught" style="max-width: 200px; height: auto; border-radius: var(--border-radius-md);">
+                    <img src="bunnycatch.png" alt="Bunny Caught" style="max-width: 350px; height: auto; border-radius: var(--border-radius-md);">
                 </div>` : '';
 
             const bunnyRunImage = outcomeKey === "rabbit-win" ? 
                 `<div style="text-align: center; margin: var(--spacing-xl) 0;">
-                    <img src="bunnyrun.png" alt="Bunny Escaped" style="max-width: 200px; height: auto; border-radius: var(--border-radius-md);">
+                    <img src="bunnyrun.png" alt="Bunny Escaped" style="max-width: 350px; height: auto; border-radius: var(--border-radius-md);">
                 </div>` : '';
 
             const bunnyFoxWinImage = outcomeKey === "contested-win" ? 
                 `<div style="text-align: center; margin: var(--spacing-xl) 0;">
-                    <img src="bunnyfoxwin.png" alt="Both Sides Win" style="max-width: 200px; height: auto; border-radius: var(--border-radius-md);">
+                    <img src="bunnyfoxwin.png" alt="Both Sides Win" style="max-width: 350px; height: auto; border-radius: var(--border-radius-md);">
                 </div>` : '';
 
             const bunnyFoxLoseImage = outcomeKey === "total-failure" ? 
                 `<div style="text-align: center; margin: var(--spacing-xl) 0;">
-                    <img src="bunnyfoxlose.png" alt="Both Sides Lose" style="max-width: 200px; height: auto; border-radius: var(--border-radius-md);">
+                    <img src="bunnyfoxlose.png" alt="Both Sides Lose" style="max-width: 350px; height: auto; border-radius: var(--border-radius-md);">
                 </div>` : '';
 
             gameInfo.scoringSummary.innerHTML = `
