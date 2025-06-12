@@ -582,23 +582,45 @@
             font-size: 16px;
         }
 
-        p {
-            margin-bottom: var(--spacing-md);
-            line-height: 1.6;
-            color: var(--text-primary);
-        }
-
-        hr {
-            margin: var(--spacing-xl) 0;
-            border: none;
-            border-top: 1px solid var(--border-light);
-        }
-
-        #main-word-grid-container h3 {
-            margin-bottom: var(--spacing-lg);
+        /* Timer Styles */
+        #timer-container {
+            display: none;
             text-align: center;
+            margin: var(--spacing-xl) 0;
+            padding: var(--spacing-lg);
+            background: var(--background-tertiary);
+            border-radius: var(--border-radius-lg);
+            border: 2px solid var(--border-light);
+        }
+
+        #timer-container.active {
+            display: block;
+        }
+
+        #timer-display {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: var(--spacing-sm);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', monospace;
+        }
+
+        #timer-display.warning {
+            color: var(--warning-color);
+            animation: pulse 1s infinite;
+        }
+
+        #timer-label {
+            font-size: 14px;
             color: var(--text-secondary);
-            font-weight: 600;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
         }
 
         /* Responsive Design */
@@ -697,6 +719,10 @@
                         <div class="card">
                             <h2 id="phase-title"></h2>
                             <p id="phase-instruction"></p>
+                            <div id="timer-container">
+                                <div id="timer-display">0:20</div>
+                                <div id="timer-label">Time Remaining</div>
+                            </div>
                             <div id="action-input-area"></div>
                             <button id="submit-action-btn" class="btn">Submit</button>
                         </div>
@@ -763,15 +789,15 @@
             
             <div id="rules-container">
                 <details>
-                    <summary>Show/Hide Full Game Rules</summary>
+                    <summary>Game Rules</summary>
                     <div id="rules-content">
                         <h3>1. Game Overview</h3>
-                        <p>In Word Weasel, players are divided into two secret teams each round: the <strong>Owls</strong>, who know a secret word, and a single <strong>Weasel</strong>, who is left in the dark. The goal is to be the first to 100 🪵 twigs.</p>
+                        <p>In Word Weasel, players are divided into two secret teams each round: the <strong>Owls</strong>, who know a secret word, and a single <strong>Weasel</strong>, who is left in the dark. The goal is to be the first to 25 🪵 twigs.</p>
                         <ul>
                             <li><strong>Players:</strong> 4+</li>
                             <li><strong>Roles:</strong> 1 Weasel, rest Owls</li>
-                            <li><strong>Starting Twigs:</strong> 50 🪵 per player</li>
-                            <li><strong>Bet Range:</strong> 5–25 🪵 twigs</li>
+                            <li><strong>Starting Twigs:</strong> 10 🪵 per player</li>
+                            <li><strong>Bet Range:</strong> 1–5 🪵 twigs</li>
                         </ul>
                         <h3>2. The Flow of a Round</h3>
                         <ol>
@@ -784,13 +810,13 @@
                         <h3>3. Scoring: The Interdependent Payout</h3>
                         <p>Payouts depend on two things: Did the Owls catch the Weasel? (<strong>Catch Success</strong>) And did the Weasel guess the word? (<strong>Guess Success</strong>). A <strong>2x Sabotage Bonus</strong> is applied if your team succeeds AND the other team fails.</p>
                         <ul>
-                            <li><strong>Scenario 1: Decisive Owl Victory (Catch Success, Guess Failure)</strong><br>Owls win their bets x2. Weasel loses (Catch Pot x2) + their own bet.</li>
-                            <li><strong>Scenario 2: Masterful Weasel Victory (Catch Failure, Guess Success)</strong><br>Weasel wins (their bet x2) + the entire Catch Pot. Owls lose their bets and must pay the Weasel's winnings.</li>
-                            <li><strong>Scenario 3: A Contested Outcome (Catch Success, Guess Success)</strong><br>Bonuses are cancelled. Owls win the Catch Pot (get their bets back). Weasel wins the Guess Pot (gets their bet back). Twigs are transferred between teams.</li>
+                            <li><strong>Scenario 1: Decisive Owl Victory (Catch Success, Guess Failure)</strong><br>Owls win their bets x2. Weasel loses their bet.</li>
+                            <li><strong>Scenario 2: Masterful Weasel Victory (Catch Failure, Guess Success)</strong><br>Weasel wins their bet x3. Owls lose their bets.</li>
+                            <li><strong>Scenario 3: A Contested Outcome (Catch Success, Guess Success)</strong><br>Bonuses are cancelled. Everyone gets their bets back.</li>
                             <li><strong>Scenario 4: Total Failure (Catch Failure, Guess Failure)</strong><br>Nobody wins. All bets are lost and removed from the game.</li>
                         </ul>
                         <h3>4. End of the Game</h3>
-                        <p>The game ends if a player reaches 100 🪵 twigs, a player's score hits 0, or after 10 rounds. The player with the highest score wins.</p>
+                        <p>The game ends if a player reaches 25 🪵 twigs, a player's score hits 0, or after 10 rounds. The player with the highest score wins.</p>
                     </div>
                 </details>
             </div>
@@ -849,6 +875,8 @@
 
         // --- GAME STATE ---
         let gameState = {};
+        let timerInterval = null;
+        let currentTimerSeconds = 0;
 
         const WORD_LISTS = {
             "Famous Landmarks": ["Eiffel Tower", "Statue of Liberty", "Great Wall", "Colosseum", "Taj Mahal", "Machu Picchu", "Pyramids of Giza", "Sydney Opera House", "Big Ben", "Christ the Redeemer", "Acropolis", "Stonehenge", "Mount Rushmore", "Burj Khalifa", "Petra", "Angkor Wat", "St. Basil's Cathedral", "Golden Gate Bridge"],
@@ -866,7 +894,7 @@
             gameState = {
                 players: playerNames.map(name => ({
                     name: name,
-                    score: 50,
+                    score: 10,
                     weaselPoints: 0,
                     isWeasel: false,
                     bet: 0,
@@ -950,8 +978,8 @@
                 case 'wager':
                     const betInput = document.getElementById('bet-input');
                     const betAmount = parseInt(betInput.value);
-                    if (isNaN(betAmount) || betAmount < 5) { alert("You must bet at least 5 🪵 twigs."); return; }
-                    if (betAmount > 25 && player.score > 25) { alert("You can bet a maximum of 25 🪵 twigs."); return; }
+                    if (isNaN(betAmount) || betAmount < 1) { alert("You must bet at least 1 🪵 twig."); return; }
+                    if (betAmount > 5 && player.score > 5) { alert("You can bet a maximum of 5 🪵 twigs."); return; }
                     if (betAmount > player.score) { alert("You cannot bet more 🪵 twigs than you have."); return; }
                     player.bet = betAmount;
                     break;
@@ -1161,8 +1189,8 @@
             // Scenario 2: Only Weasel wins (Catch Failure, Guess Success)
             else if (!catchSuccess && guessSuccess) {
                 outcomeKey = "weasel-win";
-                // Weasel: Wins 2x their stake for successful guess bet
-                const weaselWinnings = weasel.bet * 2;
+                // Weasel: Wins 3x their stake for successful guess bet
+                const weaselWinnings = weasel.bet * 3;
                 weasel.score += weaselWinnings;
                 weasel.weaselPoints += weaselWinnings;
                 changes[gameState.weaselIndex].change = weaselWinnings;
@@ -1201,10 +1229,10 @@
             let gameOver = false;
             let reason = "";
             
-            const highScorer = gameState.players.find(p => p.score >= 100);
+            const highScorer = gameState.players.find(p => p.score >= 25);
             if (highScorer) {
                 gameOver = true;
-                reason = `${highScorer.name} reached 100 🪵 twigs!`;
+                reason = `${highScorer.name} reached 25 🪵 twigs!`;
             }
             
             const bankruptPlayer = gameState.players.find(p => p.score <= 0);
@@ -1238,6 +1266,62 @@
                 <strong>The winner is ${winner.name} with ${Math.round(winner.score)} 🪵 twigs!</strong>
             `;
             updateUI();
+        }
+
+        function startTimer(seconds) {
+            // Clear any existing timer
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
+            
+            currentTimerSeconds = seconds;
+            const timerContainer = document.getElementById('timer-container');
+            const timerDisplay = document.getElementById('timer-display');
+            const timerLabel = document.getElementById('timer-label');
+            
+            // Show timer
+            timerContainer.classList.add('active');
+            
+            // Update display
+            function updateTimerDisplay() {
+                const minutes = Math.floor(currentTimerSeconds / 60);
+                const seconds = currentTimerSeconds % 60;
+                timerDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                
+                // Add warning style when under 6 seconds
+                if (currentTimerSeconds <= 5) {
+                    timerDisplay.classList.add('warning');
+                } else {
+                    timerDisplay.classList.remove('warning');
+                }
+                
+                timerLabel.textContent = 'Time Remaining';
+            }
+            
+            // Initial display
+            updateTimerDisplay();
+            
+            // Start countdown
+            timerInterval = setInterval(() => {
+                currentTimerSeconds--;
+                updateTimerDisplay();
+                
+                if (currentTimerSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    timerDisplay.textContent = '0:00';
+                    timerLabel.textContent = 'Time Up!';
+                    timerDisplay.classList.add('warning');
+                }
+            }, 1000);
+        }
+        
+        function stopTimer() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+            const timerContainer = document.getElementById('timer-container');
+            timerContainer.classList.remove('active');
         }
 
         // --- UI UPDATING ---
@@ -1343,12 +1427,17 @@
             const player = gameState.players[gameState.currentPlayerIndex];
             let title = '', instruction = '', inputHTML = '', buttonText = 'Submit';
             
+            // Stop any existing timer first
+            stopTimer();
+            
             switch(gameState.phase) {
                 case 'clue1':
                     title = `Clue 1: ${player.name}'s Turn`;
-                    instruction = "Give your BROAD clue out loud to the group. When you are finished, press 'Continue'.";
+                    instruction = "Give your BROAD clue out loud to the group. You have 20 seconds. When you are finished, press 'Continue'.";
                     inputHTML = ``;
                     buttonText = "Continue";
+                    // Start 20-second timer for clue phase
+                    setTimeout(() => startTimer(20), 100);
                     break;
                 case 'wager':
                     title = `Wager: ${player.name}'s Turn`;
@@ -1357,14 +1446,16 @@
                     } else {
                         instruction = `You are an Owl. Bet on your team's ability to catch the Weasel. Your current score: ${Math.round(player.score)} 🪵 twigs`;
                     }
-                    inputHTML = `<input type="number" id="bet-input" min="5" max="${Math.min(25, player.score)}" placeholder="Bet 5-25 🪵 twigs">`;
+                    inputHTML = `<input type="number" id="bet-input" min="1" max="${Math.min(5, player.score)}" placeholder="Bet 1-5 🪵 twigs">`;
                     buttonText = "Submit Bet";
                     break;
                 case 'clue2':
                     title = `Clue 2: ${player.name}'s Turn`;
-                    instruction = "Give your SPECIFIC clue out loud to the group. When you are finished, press 'Continue'.";
+                    instruction = "Give your SPECIFIC clue out loud to the group. You have 20 seconds. When you are finished, press 'Continue'.";
                     inputHTML = ``;
                     buttonText = "Continue";
+                    // Start 20-second timer for clue phase
+                    setTimeout(() => startTimer(20), 100);
                     break;
                 case 'verdict':
                     title = `Verdict: ${player.name}'s Turn`;
@@ -1410,7 +1501,7 @@
 
             const outcomeDescriptions = {
                 "innocent-win": "The Owls caught the Weasel, and the Weasel failed to guess the word. <strong>Owls win 2× their catch bets!</strong>",
-                "weasel-win": "The Weasel escaped detection and guessed the secret word! <strong>The Weasel wins 2× their guess bet!</strong>",
+                "weasel-win": "The Weasel escaped detection and guessed the secret word! <strong>The Weasel wins 3× their guess bet!</strong>",
                 "contested-win": "The Owls caught the Weasel, but the Weasel ALSO guessed the word correctly. <strong>Everyone pushes and gets back their original bet (1×).</strong>",
                 "total-failure": "The Owls failed to catch the Weasel, AND the Weasel failed to guess the word. <strong>Everyone loses their bets!</strong>"
             };
