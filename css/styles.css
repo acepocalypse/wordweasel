@@ -1159,21 +1159,20 @@ label {
 
     header .header-content {
         padding: var(--spacing-xl) 0;
-        max-width: 60%;
+        max-width: 50%;
         margin: 0 auto;
     }
 
     header .header-image {
-        height: 100%;
-        opacity: 0.95;
+        height: 95%;
     }
 
     header .header-image.left {
-        left: var(--spacing-md);
+        left: var(--spacing-lg);
     }
 
     header .header-image.right {
-        right: var(--spacing-md);
+        right: var(--spacing-lg);
     }
 
     header h1 {
@@ -1307,7 +1306,7 @@ label {
 
     header .header-content {
         padding: var(--spacing-xl) 0;
-        max-width: 60%;
+        max-width: 50%;
         margin: 0 auto;
     }
 
@@ -1317,11 +1316,11 @@ label {
     }
 
     header .header-image.left {
-        left: var(--spacing-sm);
+        left: var(--spacing-lg);
     }
 
     header .header-image.right {
-        right: var(--spacing-sm);
+        right: var(--spacing-lg);
     }
 
     header h1 {
