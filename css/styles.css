@@ -99,7 +99,7 @@ body {
 }
 
 main {
-    padding: var(--spacing-3xl) var(--spacing-2xl);
+    padding: var(--spacing-2xl) var(--spacing-2xl);
 }
 
 .screen {
@@ -1260,7 +1260,7 @@ label {
     }
 
     main {
-        padding: var(--spacing-2xl) var(--spacing-lg);
+        padding: var(--spacing-lg) var(--spacing-lg);
     }
 
     .card {
