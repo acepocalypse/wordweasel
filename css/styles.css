@@ -177,8 +177,8 @@ body.in-game header {
 
 body.in-game header h1 {
     font-size: 32px;
-    margin-bottom: var(--spacing-xs);
-    padding-bottom: var(--spacing-xs);
+    margin-bottom: 0;
+    padding-bottom: 0;
 }
 
 body.in-game header p {
@@ -1236,15 +1236,23 @@ label {
         padding: 0;
         min-height: 40px;
         max-height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     
     body.in-game header .header-content {
-        padding: var(--spacing-md) 0;
+        padding: var(--spacing-sm) 0;
         max-width: 80%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     body.in-game header h1 {
         font-size: 20px;
+        margin-bottom: 0;
+        padding-bottom: 0;
     }
 
     body.in-game header .header-image {
