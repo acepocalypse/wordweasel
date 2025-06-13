@@ -672,12 +672,10 @@ function updateUI() {
         case 'buffer':
             screens.buffer.classList.add('active');
             // Update buffer screen with next player info
-            const nextPlayerIndex = gameState.currentPlayerIndex + 1;
-            if (nextPlayerIndex < gameState.players.length) {
-                const nextPlayer = gameState.players[nextPlayerIndex];
-                document.querySelector('#buffer-screen h2').textContent = `🔄 Pass to ${nextPlayer.name}`;
-                document.querySelector('#buffer-screen p').textContent = `Please hand the device to ${nextPlayer.name} and ensure the previous player looks away.`;
-            }
+            const nextPlayerIndex = (gameState.currentPlayerIndex + 1) % gameState.players.length;
+            const nextPlayer = gameState.players[nextPlayerIndex];
+            document.querySelector('#buffer-screen h2').textContent = `🔄 Pass to ${nextPlayer.name}`;
+            document.querySelector('#buffer-screen p').textContent = `Please hand the device to ${nextPlayer.name} and ensure the previous player looks away.`;
             break;
             
         case 'voteResults':
