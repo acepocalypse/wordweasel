@@ -741,11 +741,10 @@ label {
 
 #player-scores {
     list-style: none;
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
     gap: var(--spacing-xs);
-    flex-wrap: nowrap;
     flex: 1;
-    justify-content: flex-end;
     margin-left: var(--spacing-lg);
 }
 
@@ -760,13 +759,11 @@ label {
     white-space: pre-line;
     text-align: center;
     line-height: 1.1;
-    flex: 1;
-    max-width: calc(25% - var(--spacing-xs));
-    min-width: 60px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     height: 40px;
+    min-width: 60px;
 }
 
 #player-scores .weasel-score {
@@ -1632,20 +1629,15 @@ label {
     #player-scores {
         gap: var(--spacing-xs);
         margin-left: var(--spacing-md);
+        grid-template-columns: repeat(4, 1fr);
     }
 
     #player-scores li {
         font-size: 10px;
         padding: var(--spacing-xs);
         min-width: 50px;
-        max-width: calc(25% - var(--spacing-xs) / 2);
         height: 40px;
         line-height: 1.4;
-    }
-
-    #player-scores li .carrot-count {
-        font-size: 12px;
-        font-weight: 700;
     }
 
     #word-grid, #main-word-grid, #reveal-word-grid, #weasel-guess-grid {
