@@ -836,10 +836,10 @@ function handleGuessSelection(e) {
 
 function displayScoringSummary(outcomeKey, results, changes) {
     const outcomeTitles = {
-        "fox-win": "Foxes Win!",
-        "rabbit-win": "Rabbit Wins!",
-        "contested-win": "Push - Both Sides Win!",
-        "total-failure": "Total Failure - Everyone Loses!"
+        "fox-win": "🦊 Foxes Win!",
+        "rabbit-win": "🐰 Rabbit Wins!",
+        "contested-win": "🤝 Push - Both Sides Win!",
+        "total-failure": "💥 Total Failure!"
     };
 
     const outcomeDescriptions = {
@@ -849,50 +849,74 @@ function displayScoringSummary(outcomeKey, results, changes) {
         "total-failure": "The Foxes failed to catch the Rabbit, AND the Rabbit failed to guess the word. <strong>Everyone loses their bets!</strong>"
     };
 
+    // Generate outcome images
+    const outcomeImages = {
+        "fox-win": `<div class="outcome-image"><img src="assets/bunnycatch.png" alt="Bunny Caught"></div>`,
+        "rabbit-win": `<div class="outcome-image"><img src="assets/bunnyrun.png" alt="Bunny Escaped"></div>`,
+        "contested-win": `<div class="outcome-image"><img src="assets/bunnyfoxwin.png" alt="Both Sides Win"></div>`,
+        "total-failure": `<div class="outcome-image"><img src="assets/bunnyfoxlose.png" alt="Both Sides Lose"></div>`
+    };
+
+    // Generate score changes
     const scoreChanges = changes.map(c => {
         const change = Math.round(c.change * 100) / 100;
-        const changeClass = change > 0 ? 'score-gain' : (change < 0 ? 'score-loss' : '');
+        const changeClass = change > 0 ? 'gain' : (change < 0 ? 'loss' : 'neutral');
         const sign = change > 0 ? '+' : '';
-        return `<li><span>${c.name}</span> <strong class="${changeClass}">${sign}${change} 🥕 carrots</strong> ( ${Math.round(c.oldScore)} → ${Math.round(c.oldScore + change)} )</li>`;
+        return `
+            <li>
+                <span class="player-name">${c.name}</span>
+                <div class="score-change-details">
+                    <span class="score-change ${changeClass}">${sign}${change} 🥕</span>
+                    <span class="score-transition">${Math.round(c.oldScore)} → ${Math.round(c.oldScore + change)}</span>
+                </div>
+            </li>
+        `;
     }).join('');
 
-    // Add bunny catch image for fox wins
-    const bunnyCatchImage = outcomeKey === "fox-win" ? 
-        `<div style="text-align: center; margin: var(--spacing-xl) 0;">
-            <img src="assets/bunnycatch.png" alt="Bunny Caught" style="max-width: 350px; height: auto; border-radius: var(--border-radius-md);">
-        </div>` : '';
-
-    const bunnyRunImage = outcomeKey === "rabbit-win" ? 
-        `<div style="text-align: center; margin: var(--spacing-xl) 0;">
-            <img src="assets/bunnyrun.png" alt="Bunny Escaped" style="max-width: 350px; height: auto; border-radius: var(--border-radius-md);">
-        </div>` : '';
-
-    const bunnyFoxWinImage = outcomeKey === "contested-win" ? 
-        `<div style="text-align: center; margin: var(--spacing-xl) 0;">
-            <img src="assets/bunnyfoxwin.png" alt="Both Sides Win" style="max-width: 350px; height: auto; border-radius: var(--border-radius-md);">
-        </div>` : '';
-
-    const bunnyFoxLoseImage = outcomeKey === "total-failure" ? 
-        `<div style="text-align: center; margin: var(--spacing-xl) 0;">
-            <img src="assets/bunnyfoxlose.png" alt="Both Sides Lose" style="max-width: 350px; height: auto; border-radius: var(--border-radius-md);">
-        </div>` : '';
-
+    const rabbit = gameState.players[gameState.rabbitIndex];
+    
     gameInfo.scoringSummary.innerHTML = `
-        <h2 class="outcome-title ${outcomeKey}">${outcomeTitles[outcomeKey]}</h2>
-        ${bunnyCatchImage}
-        ${bunnyRunImage}
-        ${bunnyFoxWinImage}
-        ${bunnyFoxLoseImage}
-        <p><strong>The Secret Word was:</strong> ${gameState.secretWord}</p>
-        <p><strong>The Rabbit was:</strong> ${gameState.players[gameState.rabbitIndex].name}</p>
-        <p><strong>Catch Attempt:</strong> ${results.catchSuccess ? 'SUCCESS' : 'FAILURE'}</p>
-        <p><strong>Rabbit's Guess:</strong> "${gameState.rabbitGuess || 'No Guess Made'}" (${results.guessSuccess ? 'SUCCESS' : 'FAILURE'})</p>
-        <hr style="margin: 15px 0; border-color: var(--primary-color);">
-        <p>${outcomeDescriptions[outcomeKey]}</p>
-        <h3>Score Changes:</h3>
-        <ul id="player-score-changes">
-            ${scoreChanges}
-        </ul>
+        <div class="scoring-header">
+            <div class="outcome-banner ${outcomeKey}">${outcomeTitles[outcomeKey]}</div>
+            ${outcomeImages[outcomeKey] || ''}
+        </div>
+        
+        <div class="round-summary">
+            <h3>Round Summary</h3>
+            <div class="summary-grid">
+                <div class="summary-item">
+                    <h4>Secret Word</h4>
+                    <div class="value">${gameState.secretWord}</div>
+                </div>
+                <div class="summary-item">
+                    <h4>The Rabbit</h4>
+                    <div class="value">${rabbit.name}</div>
+                </div>
+                <div class="summary-item">
+                    <h4>Catch Attempt</h4>
+                    <div class="result ${results.catchSuccess ? 'success' : 'failure'}">
+                        ${results.catchSuccess ? 'SUCCESS' : 'FAILURE'}
+                    </div>
+                </div>
+                <div class="summary-item">
+                    <h4>Rabbit's Guess</h4>
+                    <div class="result ${results.guessSuccess ? 'success' : 'failure'}">
+                        ${results.guessSuccess ? 'SUCCESS' : 'FAILURE'}
+                    </div>
+                    <div class="value">"${gameState.rabbitGuess || 'No Guess Made'}"</div>
+                </div>
+            </div>
+            <div class="outcome-description">
+                ${outcomeDescriptions[outcomeKey]}
+            </div>
+        </div>
+        
+        <div class="score-changes-section">
+            <h3>Score Changes</h3>
+            <ul id="player-score-changes">
+                ${scoreChanges}
+            </ul>
+        </div>
     `;
 }
 
