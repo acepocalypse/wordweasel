@@ -636,8 +636,15 @@ function updateUI() {
     
     switchScreen('game');
     document.body.classList.add('in-game');
-    gameInfo.roundCounter.textContent = `Round ${gameState.currentRound} / ${gameState.maxRounds}`;
-    gameInfo.playerScores.innerHTML = gameState.players.map(p => `<li class="${p.isRabbit && (gameState.phase === 'scoring' || gameState.phase === 'gameOver') ? 'weasel-score' : ''}">${p.name}: ${Math.round(p.score)} 🥕</li>`).join('');
+    gameInfo.roundCounter.textContent = `R${gameState.currentRound}/${gameState.maxRounds}`;
+    
+    // Create score display with two lines: name and carrot count
+    gameInfo.playerScores.innerHTML = gameState.players.map(p => {
+        const score = Math.round(p.score);
+        const name = p.name.length > 8 ? p.name.substring(0, 8) + '…' : p.name;
+        const scoreText = `${name}\n${score}🥕`;
+        return `<li class="${p.isRabbit && (gameState.phase === 'scoring' || gameState.phase === 'gameOver') ? 'weasel-score' : ''}">${scoreText}</li>`;
+    }).join('');
 
     Object.values(screens).forEach(s => {
         if (s.parentElement === document.getElementById('game-phase-container')) s.classList.remove('active');
