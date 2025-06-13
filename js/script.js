@@ -716,7 +716,7 @@ function showRevealScreen() {
     screens.reveal.classList.add('active');
     
     const player = gameState.players[gameState.currentPlayerIndex];
-    gameInfo.revealRoleTitle.textContent = player.isRabbit ? "You are the RABBIT!" : "You are a FOX";
+    gameInfo.revealRoleTitle.textContent = player.isRabbit ? "You are the RABBIT 🐰" : "You are a FOX 🦊";
     gameInfo.revealInstruction.textContent = player.isRabbit 
         ? "You DON'T know the secret word. Blend in and try to figure it out from the clues!"
         : "Your pack's secret word is highlighted below. Give clues to help your fellow Foxes find the Rabbit without giving the word away!";
