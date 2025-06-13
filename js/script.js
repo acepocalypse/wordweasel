@@ -278,11 +278,28 @@ function showVoteResults() {
     
     let maxVotes = 0;
     let accusedIndex = -1;
+    let tiedPlayers = [];
+
+    // First pass: find maximum votes
     for (const playerIndex in voteCounts) {
         if (voteCounts[playerIndex] > maxVotes) {
             maxVotes = voteCounts[playerIndex];
-            accusedIndex = parseInt(playerIndex);
         }
+    }
+
+    // Second pass: find all players with maximum votes
+    for (const playerIndex in voteCounts) {
+        if (voteCounts[playerIndex] === maxVotes) {
+            tiedPlayers.push(parseInt(playerIndex));
+        }
+    }
+
+    // Handle tie scenario
+    if (tiedPlayers.length > 1) {
+        showTiebreakerScreen(tiedPlayers);
+        return; // Exit early, don't proceed to normal results
+    } else if (tiedPlayers.length === 1) {
+        accusedIndex = tiedPlayers[0];
     }
     
     // Display results with improved design
@@ -927,8 +944,80 @@ function displayScoringSummary(outcomeKey, results, changes) {
     `;
 }
 
+function showTiebreakerScreen(tiedPlayers) {
+    // Calculate vote counts for display
+    const voteCounts = {};
+    gameState.players.forEach(p => {
+        if (p.vote !== null) {
+            voteCounts[p.vote] = (voteCounts[p.vote] || 0) + 1;
+        }
+    });
+    
+    let html = `
+        <div class="tiebreaker-screen">
+            <div style="text-align: center; margin-bottom: var(--spacing-xl);">
+                <div style="font-size: 48px; margin-bottom: var(--spacing-md);">🪨📄✂️</div>
+                <h2 style="color: var(--warning-color); margin-bottom: var(--spacing-lg);">Tiebreaker Required!</h2>
+            </div>
+            
+            <div style="background: var(--background-tertiary); border-radius: var(--border-radius-lg); padding: var(--spacing-xl); margin-bottom: var(--spacing-xl); border: 1px solid var(--border-light);">
+                <p style="text-align: center; margin-bottom: var(--spacing-md); font-size: 16px;">The following players are tied with <strong>${voteCounts[tiedPlayers[0]]}</strong> vote${voteCounts[tiedPlayers[0]] !== 1 ? 's' : ''} each:</p>
+                <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: var(--spacing-md); justify-content: center;">
+                    ${tiedPlayers.map(index => 
+                        `<li style="background: var(--primary-color); color: var(--text-on-primary); padding: var(--spacing-sm) var(--spacing-md); border-radius: var(--border-radius-md); font-weight: 600;">${gameState.players[index].name}</li>`
+                    ).join('')}
+                </ul>
+            </div>
+            
+            <div style="text-align: center; margin-bottom: var(--spacing-xl);">
+                <p style="font-size: 18px; font-weight: 600; margin-bottom: var(--spacing-sm);">🎲 Resolution Required</p>
+                <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">These players should play <strong>Rock-Paper-Scissors</strong> outside the game to determine who gets accused.</p>
+                <p style="font-weight: 600; color: var(--text-primary);">Click the <strong>loser</strong> below:</p>
+            </div>
+            
+            <div class="tiebreaker-buttons" style="display: grid; gap: var(--spacing-md); max-width: 400px; margin: 0 auto;">
+                ${tiedPlayers.map(index => 
+                    `<button onclick="selectTiebreakerWinner(${index})" class="tiebreaker-btn" style="background: var(--accent-color); color: var(--text-on-color); border: none; padding: var(--spacing-lg); border-radius: var(--border-radius-md); font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s ease;">
+                        😞 ${gameState.players[index].name} Lost RPS
+                    </button>`
+                ).join('')}
+            </div>
+        </div>
+    `;
+    
+    gameInfo.voteResultsContent.innerHTML = html;
+}
+
+function selectTiebreakerWinner(winnerIndex) {
+    gameState.accusedIndex = winnerIndex;
+    
+    // Show the tiebreaker result and then proceed to normal vote results display
+    let resultsHTML = '';
+    
+    resultsHTML += `<div style="text-align: center; margin-bottom: var(--spacing-xl);">`;
+    resultsHTML += `<div style="background: var(--accent-color); color: var(--text-on-primary); padding: var(--spacing-xl); border-radius: var(--border-radius-lg); margin-bottom: var(--spacing-lg);">`;
+    resultsHTML += `<div style="font-size: 24px; margin-bottom: var(--spacing-sm);">🎲</div>`;
+    resultsHTML += `<h3 style="font-size: 18px; font-weight: 700; margin-bottom: var(--spacing-xs);">Tiebreaker Resolved!</h3>`;
+    resultsHTML += `<p style="opacity: 0.9;">${gameState.players[winnerIndex].name} lost Rock-Paper-Scissors</p>`;
+    resultsHTML += `</div>`;
+    resultsHTML += `</div>`;
+    
+    resultsHTML += `<div style="background: var(--primary-color); color: var(--text-on-primary); padding: var(--spacing-xl); border-radius: var(--border-radius-lg); text-align: center; margin-bottom: var(--spacing-xl); box-shadow: var(--shadow-medium);">`;
+    resultsHTML += `<h3 style="margin-bottom: var(--spacing-sm); font-size: 20px; color: var(--text-on-primary);">🎯 The Pack's Final Verdict</h3>`;
+    resultsHTML += `<p style="font-size: 18px; font-weight: 600;">${gameState.players[winnerIndex].name}</p>`;
+    resultsHTML += `<p style="font-size: 14px; opacity: 0.9; margin-top: var(--spacing-xs);">Accused after losing the tiebreaker</p>`;
+    resultsHTML += `</div>`;
+    
+    resultsHTML += `<div style="text-align: center; padding: var(--spacing-lg); background: var(--background-secondary); border-radius: var(--border-radius-md); border: 1px solid var(--border-light);">`;
+    resultsHTML += `<p style="color: var(--text-secondary); font-size: 14px; font-style: italic;">`;
+    resultsHTML += `The foxes have made their choice through fair competition. But was their hunt successful?`;
+    resultsHTML += `</p>`;
+    resultsHTML += `</div>`;
+    
+    gameInfo.voteResultsContent.innerHTML = resultsHTML;
+}
+
 // --- EVENT LISTENERS ---
-// Replace the player count change listener with enhanced UI interaction
 // Update player input UI
 function updatePlayerInputs() {
     const count = parseInt(playerCountInput.value);
