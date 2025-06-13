@@ -1164,16 +1164,16 @@ label {
     }
 
     header .header-image {
-        height: 95%;
+        height: 100%;
         opacity: 0.95;
     }
 
     header .header-image.left {
-        left: var(--spacing-sm);
+        left: var(--spacing-md);
     }
 
     header .header-image.right {
-        right: var(--spacing-sm);
+        right: var(--spacing-md);
     }
 
     header h1 {
