@@ -549,6 +549,7 @@ label {
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
     box-shadow: 0 4px 15px rgba(123, 64, 25, 0.06);
     position: relative;
+    animation: floatAvatar 3s ease-in-out infinite;
 }
 
 .player-input-group:hover {
@@ -569,6 +570,7 @@ label {
     padding: 6px;
     border-radius: var(--border-radius-sm);
     order: -1;
+    animation: floatAvatar 3s ease-in-out infinite;
 }
 
 /* Individual player colors - using more specific selectors */
@@ -1525,6 +1527,15 @@ label {
     50% { transform: translateY(-10px); }
 }
 
+@keyframes floatAvatar {
+    0%, 100% { 
+        transform: translateY(0); 
+    }
+    50% { 
+        transform: translateY(-3px); 
+    }
+}
+
 /* Media Queries */
 @media (max-width: 768px) {
     /* Show grass frame only on mobile */
@@ -1746,4 +1757,3 @@ label {
     margin: 0;
     line-height: 1.4;
 }
-
