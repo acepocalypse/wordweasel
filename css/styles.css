@@ -230,8 +230,24 @@ main {
 }
 
 /* Enhanced Header Styles */
-header {
+/* header {
     background: linear-gradient(180deg, #D4864B 0%, #D8906F 100%);
+    padding: var(--spacing-xl) var(--spacing-lg);
+    text-align: center;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    min-height: 100px;
+    border-radius: var(--border-radius-xl) var(--border-radius-xl) 0 0;
+} */
+
+header {
+    background-color: #365E32;
+    background-image: url('../assets/topography-pattern.svg');
+    background-size: 300px 300px;
+    background-repeat: repeat;
     padding: var(--spacing-xl) var(--spacing-lg);
     text-align: center;
     position: relative;
