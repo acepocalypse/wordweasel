@@ -655,7 +655,7 @@ function updateUI() {
     switch(gameState.phase) {
         case 'reveal':
             screens.passDevice.classList.add('active');
-            gameInfo.passToPlayerName.textContent = `Pass to ${player.name}`;
+            gameInfo.passToPlayerName.textContent = `🔄 Pass to ${player.name}`;
             break;
         
         case 'transition-wager':
