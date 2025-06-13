@@ -231,7 +231,7 @@ main {
 
 /* Enhanced Header Styles */
 header {
-    background: linear-gradient(135deg, #D4864B 0%, #D8906F 100%);
+    background: linear-gradient(180deg, #D4864B 0%, #D8906F 100%);
     padding: var(--spacing-xl) var(--spacing-lg);
     text-align: center;
     position: relative;
@@ -260,6 +260,17 @@ header .header-content {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.header-title-image {
+    max-height: 65px;
+    width: auto;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+    transition: transform 0.3s ease;
+}
+
+.header-title-image:hover {
+    transform: scale(1.05);
 }
 
 header h1 {
@@ -1037,7 +1048,6 @@ label {
     max-width: 280px;
     height: auto;
     border-radius: var(--border-radius-md);
-    box-shadow: var(--shadow-medium);
 }
 
 .round-summary {
@@ -1552,10 +1562,6 @@ label {
         margin: 0 auto;
     }
 
-    .header-title-image {
-        max-height: 60px;
-    }
-
     header p {
         font-size: 14px;
         padding: var(--spacing-xs) var(--spacing-sm);
@@ -1740,14 +1746,3 @@ label {
     line-height: 1.4;
 }
 
-/* Header Title Image */
-.header-title-image {
-    max-height: 65px;
-    width: auto;
-    filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.3));
-    transition: transform 0.3s ease;
-}
-
-.header-title-image:hover {
-    transform: scale(1.05);
-}
