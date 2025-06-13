@@ -53,97 +53,179 @@
                 
                 <div id="rules-container">
                     <details>
-                        <summary>Full Game Rules</summary>
+                        <summary>📋 How to Play</summary>
                         <div id="rules-content">
-                          <section id="game-overview">
-                            <h2>1. Game Overview</h2>
-                            <p>
-                              In <strong>Bluff Den</strong>, each round splits players into:
-                              <ul>
-                                <li><strong>Foxes</strong> (all but one) who see the secret word</li>
-                                <li><strong>Rabbit</strong> (one) who does not</li>
-                              </ul>
-                              First to 25 🥕 carrots wins.
-                            </p>
-                            <ul>
-                              <li><strong>Players:</strong> 4+</li>
-                              <li><strong>Starting Carrots:</strong> 10 per player</li>
-                              <li><strong>Bet Range:</strong> 1–3 🥕</li>
-                            </ul>
-                          </section>
+                            <div class="rules-intro">
+                                <h2>Welcome to Bluff Den</h2>
+                                <p class="rules-tagline">A game of deception where foxes hunt rabbits in plain sight.</p>
+                            </div>
 
-                          <section id="round-flow">
-                            <h2>2. Round Flow</h2>
-                            <ol>
-                              <li>
-                                <strong>Word Grid Reveal (Pass the Phone):</strong>
-                                Foxes see the secret word on the 3×6 grid; Rabbit sees only the blank grid.
-                              </li>
-                              <li>
-                                <strong>Clue Round 1:</strong>
-                                Each player shares a one-word (or short phrase) clue aloud.
-                              </li>
-                              <li>
-                                <strong>The Wager:</strong>
-                                Players secretly bet carrots. Foxes bet on catching the Rabbit; Rabbit bets on guessing the word.
-                              </li>
-                              <li>
-                                <strong>Clue Round 2:</strong>
-                                Each player gives a more specific second clue.
-                              </li>
-                              <li>
-                                <strong>Reveal & Guess:</strong>
-                                Everyone votes on who the Rabbit is. Then the Rabbit makes a secret guess from the grid.
-                              </li>
-                            </ol>
-                          </section>
+                            <section class="rules-section">
+                                <div class="section-header">
+                                    <h3>Game Overview</h3>
+                                </div>
+                                <div class="rules-highlight-box">
+                                    <p><strong>Goal:</strong> First player to reach <span class="carrot-highlight">25 carrots 🥕</span> wins!</p>
+                                </div>
+                                
+                                <div class="rules-grid">
+                                    <div class="rules-card">
+                                        <h4>The Foxes</h4>
+                                        <p>All players except one</p>
+                                        <ul>
+                                            <li>Know the secret word</li>
+                                            <li>Give clues to catch the rabbit</li>
+                                            <li>Win by successful detection</li>
+                                        </ul>
+                                    </div>
+                                    <div class="rules-card">
+                                        <h4>The Rabbit</h4>
+                                        <p>One player chosen randomly</p>
+                                        <ul>
+                                            <li>Doesn't know the word</li>
+                                            <li>Must blend in with foxes</li>
+                                            <li>Wins by guessing correctly</li>
+                                        </ul>
+                                    </div>
+                                </div>
 
-                          <section id="scoring">
-                            <h2>3. Scoring & Payouts</h2>
-                            <p>
-                              Payouts depend on two outcomes:
-                              <ul>
-                                <li><strong>Catch Success:</strong> Did Foxes catch the Rabbit?</li>
-                                <li><strong>Guess Success:</strong> Did the Rabbit guess correctly?</li>
-                              </ul>
-                              A <strong>2× Sabotage Bonus</strong> applies when one team succeeds and the other fails.
-                            </p>
-                            <ul>
-                              <li>
-                                <strong>1. Fox Decisive Victory</strong>
-                                <br>Catch = ✔️, Guess = ❌  
-                                Foxes win double their bets; Rabbit loses their bet.
-                              </li>
-                              <li>
-                                <strong>2. Rabbit Masterful Escape</strong>
-                                <br>Catch = ❌, Guess = ✔️  
-                                Rabbit wins triple their bet; Foxes lose theirs.
-                              </li>
-                              <li>
-                                <strong>3. Contested Outcome</strong>
-                                <br>Catch = ✔️, Guess = ✔️  
-                                No one wins—everyone gets their bets back.
-                              </li>
-                              <li>
-                                <strong>4. Total Failure</strong>
-                                <br>Catch = ❌, Guess = ❌  
-                                All bets are lost and removed from play.
-                              </li>
-                            </ul>
-                          </section>
+                                <div class="game-basics">
+                                    <div class="basics-item">
+                                        <strong>Players:</strong> 4-10 people
+                                    </div>
+                                    <div class="basics-item">
+                                        <strong>Starting:</strong> 10 carrots each
+                                    </div>
+                                    <div class="basics-item">
+                                        <strong>Betting:</strong> 1-3 carrots per round
+                                    </div>
+                                </div>
+                            </section>
 
-                          <section id="endgame">
-                            <h2>4. End of Game</h2>
-                            <p>
-                              The game ends when any of these occur:
-                              <ul>
-                                <li>A player reaches 25 🥕 carrots</li>
-                                <li>A player's score drops to 0</li>
-                                <li>10 rounds have been completed</li>
-                              </ul>
-                              Highest-scoring player wins.
-                            </p>
-                          </section>
+                            <section class="rules-section">
+                                <div class="section-header">
+                                    <h3>Round Structure</h3>
+                                </div>
+                                
+                                <div class="round-steps">
+                                    <div class="step-card">
+                                        <div class="step-number">1</div>
+                                        <div class="step-content">
+                                            <h4>Role Assignment</h4>
+                                            <p>Foxes see the secret word highlighted on a grid. The rabbit sees only the grid without knowing which word is secret.</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="step-card">
+                                        <div class="step-number">2</div>
+                                        <div class="step-content">
+                                            <h4>First Clues</h4>
+                                            <p>Each player gives a broad, one-word clue out loud. The rabbit must blend in without knowing the target word.</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="step-card">
+                                        <div class="step-number">3</div>
+                                        <div class="step-content">
+                                            <h4>Place Bets</h4>
+                                            <p><strong>Foxes:</strong> Bet on catching the rabbit<br>
+                                            <strong>Rabbit:</strong> Bet on guessing the word</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="step-card">
+                                        <div class="step-number">4</div>
+                                        <div class="step-content">
+                                            <h4>Second Clues</h4>
+                                            <p>Everyone gives a more specific second clue. Foxes must be careful not to make it too obvious.</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="step-card">
+                                        <div class="step-number">5</div>
+                                        <div class="step-content">
+                                            <h4>Voting & Guessing</h4>
+                                            <p>All players vote on who they think is the rabbit. Then the rabbit makes their final word guess from the grid.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <section class="rules-section">
+                                <div class="section-header">
+                                    <h3>Scoring</h3>
+                                </div>
+                                
+                                <div class="scoring-scenarios">
+                                    <div class="scenario-card victory">
+                                        <div class="scenario-header">
+                                            <h4>Fox Victory</h4>
+                                            <div class="scenario-outcome">Rabbit caught + Word not guessed</div>
+                                        </div>
+                                        <div class="scenario-payout">
+                                            <span class="winner">Foxes win 2× their bets</span>
+                                            <span class="loser">Rabbit loses their bet</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="scenario-card escape">
+                                        <div class="scenario-header">
+                                            <h4>Rabbit Victory</h4>
+                                            <div class="scenario-outcome">Rabbit escaped + Word guessed correctly</div>
+                                        </div>
+                                        <div class="scenario-payout">
+                                            <span class="winner">Rabbit wins 3× their bet</span>
+                                            <span class="loser">Foxes lose their bets</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="scenario-card draw">
+                                        <div class="scenario-header">
+                                            <h4>Draw</h4>
+                                            <div class="scenario-outcome">Both sides succeed</div>
+                                        </div>
+                                        <div class="scenario-payout">
+                                            <span class="neutral">Everyone gets bets back</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="scenario-card failure">
+                                        <div class="scenario-header">
+                                            <h4>Total Failure</h4>
+                                            <div class="scenario-outcome">Both sides fail</div>
+                                        </div>
+                                        <div class="scenario-payout">
+                                            <span class="loser">Everyone loses their bets</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <section class="rules-section">
+                                <div class="section-header">
+                                    <h3>Game End</h3>
+                                </div>
+                                
+                                <div class="endgame-conditions">
+                                    <div class="condition-card">
+                                        <div>
+                                            <strong>Victory:</strong> First to 25 carrots 🥕
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="condition-card">
+                                        <div>
+                                            <strong>Elimination:</strong> Player reaches 0 carrots
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="condition-card">
+                                        <div>
+                                            <strong>Time Limit:</strong> Maximum 10 rounds
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
                         </div>
                     </details>
                 </div>
