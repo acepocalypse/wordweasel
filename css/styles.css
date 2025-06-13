@@ -211,14 +211,14 @@ main {
 /* Enhanced Header Styles */
 header {
     background: linear-gradient(135deg, #D4864B 0%, #D8906F 100%);
-    padding: var(--spacing-2xl) var(--spacing-lg) var(--spacing-xl);
+    padding: var(--spacing-xl) var(--spacing-lg);
     text-align: center;
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    min-height: 140px;
+    min-height: 100px;
     border-radius: var(--border-radius-xl) var(--border-radius-xl) 0 0;
 }
 
@@ -233,24 +233,12 @@ header::before {
     pointer-events: none;
 }
 
-header .header-image {
-    position: absolute;
-    height: 90%;
-    object-fit: contain;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
-}
-
-header .header-image.left {
-    left: var(--spacing-2xl);
-}
-
-header .header-image.right {
-    right: var(--spacing-2xl);
-}
-
 header .header-content {
     z-index: 2;
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 header h1 {
@@ -1548,21 +1536,10 @@ label {
     header .header-content {
         padding: var(--spacing-xs) 0;
         max-width: 80%;
-        margin: 0 auto;
-    }
+        margin: 0 auto;    }
 
-    header .header-image.left {
-        left: var(--spacing-sm);
-    }
-
-    header .header-image.right {
-        right: var(--spacing-sm);
-    }
-
-    header h1 {
-        font-size: clamp(24px, 7vw, 32px);
-        line-height: 0.95;
-        letter-spacing: -0.3px;        margin-bottom: var(--spacing-xs);
+    .header-title-image {
+        max-height: 60px;
     }
 
     header p {
@@ -1739,3 +1716,17 @@ label {
     margin: 0;
     line-height: 1.4;
 }
+
+/* Header Title Image */
+.header-title-image {
+    max-height: 65px;
+    width: auto;
+    filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.3));
+    transition: transform 0.3s ease;
+}
+
+.header-title-image:hover {
+    transform: scale(1.05);
+}
+
+/* Remove header side images styling */
