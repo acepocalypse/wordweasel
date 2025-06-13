@@ -12,7 +12,7 @@
     --warm-peach: #E6B08A;
     --warm-cream: #F5E6D3;
     
-    /* Updated Secondary Colors */
+    /* Secondary Colors */
     --secondary-color: #D4864B;
     --secondary-light: #E6B08A;
     --secondary-dark: #8B5A3C;
@@ -129,7 +129,24 @@ body::before {
     z-index: -1;
 }
 
-/* Layout */
+/* Bottom Grass Frame - Hidden by default, shown only on mobile */
+body::after {
+    content: '';
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background-image: url('../assets/grassframe.png');
+    background-repeat: repeat-x;
+    background-position: bottom;
+    background-size: auto 100%;
+    z-index: 9999;
+    pointer-events: none;
+    filter: drop-shadow(0 -1px 2px rgba(0, 0, 0, 0.1));
+    display: none;
+}
+
 #app-container {
     max-width: 800px;
     margin: 0 auto;
@@ -143,6 +160,7 @@ body::before {
     overflow: hidden;
     position: relative;
     border: 1px solid rgba(255, 255, 255, 0.4);
+    padding-bottom: 80px; /* Add padding to prevent content overlap */
 }
 
 main {
@@ -562,7 +580,7 @@ label {
 .player-count-container {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-lg);
+    gap: var(--spacing-sm);
     margin-bottom: var(--spacing-2xl);
     padding: var(--spacing-xl);
     background: rgba(255, 255, 255, 0.6);
@@ -646,7 +664,7 @@ label {
     background: rgba(255, 255, 255, 0.6);
     padding: var(--spacing-sm);
     border-radius: var(--border-radius-sm);
-    margin-top: var(--spacing-sm);
+    margin-top: var(--spacing-xs);
 }
 
 /* Game Info Bar */
@@ -1462,6 +1480,12 @@ label {
 
 /* Media Queries */
 @media (max-width: 768px) {
+    /* Show grass frame only on mobile */
+    body::after {
+        display: block;
+        height: 50px;
+    }
+    
     body {
         padding: 0;
         overscroll-behavior: none;
@@ -1474,9 +1498,14 @@ label {
         border-radius: 0;
         min-height: 100vh;
         box-shadow: none;
-        padding-bottom: env(safe-area-inset-bottom, 40px);
+        padding-bottom: calc(env(safe-area-inset-bottom, 40px) + 80px); /* Account for grass frame */
     }
-
+    
+    /* Adjust grass frame height for mobile */
+    body::after {
+        height: 50px;
+    }
+    
     header {
         padding: var(--spacing-md) var(--spacing-sm);
         min-height: 80px;
