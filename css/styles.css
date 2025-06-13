@@ -263,6 +263,10 @@ h3 {
     background: var(--warning-dark);
 }
 
+#start-game-btn {
+    margin-top: 0;
+}
+
 /* Form Elements */
 input[type="text"], input[type="number"] {
     width: 100%;
