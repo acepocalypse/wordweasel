@@ -54,6 +54,8 @@ const gameInfo = {
 let gameState = {};
 let timerInterval = null;
 let currentTimerSeconds = 0;
+let revealTimerInterval = null; // Add reveal timer tracking
+let revealTimerSeconds = 0;
 
 const WORD_LISTS = {
     "Famous Landmarks": ["Eiffel Tower", "Statue of Liberty", "Great Wall", "Colosseum", "Taj Mahal", "Machu Picchu", "Pyramids of Giza", "Sydney Opera House", "Big Ben", "Christ the Redeemer", "Acropolis", "Stonehenge", "Mount Rushmore", "Burj Khalifa", "Petra", "Angkor Wat", "St. Basil's Cathedral", "Golden Gate Bridge"],
@@ -741,280 +743,70 @@ function showRevealScreen() {
     gameInfo.revealWordGrid.innerHTML = gameState.wordGrid.map(word => 
         `<div class="word-cell ${!player.isRabbit && word === gameState.secretWord ? 'secret' : ''}">${word}</div>`
     ).join('');
+    
+    // Start reveal timer
+    startRevealTimer();
 }
 
-function setupMainPhaseScreen() {
-    const player = gameState.players[gameState.currentPlayerIndex];
-    let title = '', instruction = '', inputHTML = '', buttonText = 'Submit';
-    
-    // Stop any existing timer first
-    stopTimer();
-    
-    switch(gameState.phase) {
-        case 'transition-clue1':
-            title = `Get Ready for First Clue: ${player.name}'s Turn`;
-            instruction = "Prepare your BROAD clue. When you are ready, press 'Begin' and you'll have 20 seconds to give your clue.";
-            inputHTML = ``;
-            buttonText = "Begin";
-            break;
-        case 'clue1':
-            title = `First Clue: ${player.name}'s Turn`;
-            instruction = "Give your BROAD clue out loud to the group. You have 20 seconds. When you are finished, press 'Continue'.";
-            inputHTML = ``;
-            buttonText = "Continue";
-            // Start 20-second timer for clue phase
-            setTimeout(() => startTimer(20), 100);
-            break;
-        case 'wager':
-            title = `Wager: ${player.name}'s Turn`;
-            if (player.isRabbit) {
-                instruction = `You are the Rabbit. Bet on your ability to guess the secret word. Your current score: ${Math.round(player.score)} 🥕 carrots`;
-            } else {
-                instruction = `You are a Fox. Bet on your pack's ability to catch the Rabbit. Your current score: ${Math.round(player.score)} 🥕 carrots`;
-            }
-            inputHTML = `
-                <div class="wager-buttons">
-                    <button class="wager-btn" data-amount="1">
-                        <span class="wager-amount">1 🥕</span>
-                        <span class="wager-label">Carrot</span>
-                    </button>
-                    <button class="wager-btn" data-amount="2">
-                        <span class="wager-amount">2 🥕</span>
-                        <span class="wager-label">Carrots</span>
-                    </button>
-                    <button class="wager-btn" data-amount="3">
-                        <span class="wager-amount">3 🥕</span>
-                        <span class="wager-label">Carrots</span>
-                    </button>
-                </div>
-                <div class="wager-explanation" id="wager-explanation">
-                    <div>Select your bet amount to see potential winnings</div>
-                </div>
-            `;
-            buttonText = "Submit Bet";
-            break;
-                        case 'transition-clue2':
-            title = `Get Ready for Second Clue: ${player.name}'s Turn`;
-            instruction = "Prepare your second clue. When you are ready, press 'Begin' and you'll have 20 seconds to give your clue.";
-            inputHTML = ``;
-            buttonText = "Begin";
-            break;
-        case 'clue2':
-            title = `Second Clue: ${player.name}'s Turn`;
-            instruction = "Give your second clue out loud to the group. You have 20 seconds. When you are finished, press 'Continue'.";
-            inputHTML = ``;
-            buttonText = "Continue";
-            // Start 20-second timer for clue phase
-            setTimeout(() => startTimer(20), 100);
-            break;
-        case 'verdict':
-            title = `Verdict: ${player.name}'s Turn`;
-            instruction = "All clues have been given. Now, vote for who you think the Rabbit is.";
-            inputHTML = `<ul id="vote-options">` + gameState.players
-                .map((p, i) => `<li class="vote-option" data-index="${i}">${p.name}</li>`)
-                .join('') + `</ul>`;
-            buttonText = "Submit Vote";
-            break;
+function startRevealTimer() {
+    // Clear any existing reveal timer
+    if (revealTimerInterval) {
+        clearInterval(revealTimerInterval);
     }
     
-    gameInfo.phaseTitle.textContent = title;
-    gameInfo.phaseInstruction.textContent = instruction;
-    gameInfo.actionInputArea.innerHTML = inputHTML;
-    gameInfo.submitActionBtn.textContent = buttonText;
+    revealTimerSeconds = 10;
+    const revealButton = gameInfo.roleRevealedBtn;
+    const timerContainer = document.getElementById('reveal-timer-container');
+    const timerDisplay = document.getElementById('reveal-timer-display');
+    const timerLabel = document.getElementById('reveal-timer-label');
     
-    gameInfo.mainWordGrid.innerHTML = gameState.wordGrid.map(word => 
-        `<div class="word-cell">${word}</div>`
-    ).join('');
+    // Disable button and show timer
+    revealButton.disabled = true;
+    revealButton.classList.add('disabled-with-timer');
+    timerContainer.classList.add('active');
     
-    if (gameState.phase === 'verdict') {
-        document.querySelectorAll('.vote-option').forEach(opt => opt.addEventListener('click', handleVoteSelection));
-    } else if (gameState.phase === 'wager') {
-        // Add event listeners for wager buttons
-        document.querySelectorAll('.wager-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                // Remove selection from all buttons
-                document.querySelectorAll('.wager-btn').forEach(b => b.classList.remove('selected-wager'));
-                
-                // Add selection to clicked button
-                btn.classList.add('selected-wager');
-                // Set the player's bet based on the button clicked
-                const betAmount = parseInt(btn.dataset.amount);
-                gameState.players[gameState.currentPlayerIndex].bet = betAmount;
-                
-                // Update wager explanation
-                updateWagerExplanation(betAmount, player.isRabbit);
-            });
-        });
+    // Update display function
+    function updateRevealTimerDisplay() {
+        timerDisplay.textContent = revealTimerSeconds;
+        timerLabel.textContent = revealTimerSeconds === 1 ? 'second remaining' : 'seconds remaining';
+        
+        // Update button text to show countdown
+        revealButton.innerHTML = `<span class="btn-timer">⏱️ ${revealTimerSeconds}s</span><span>Please read carefully...</span>`;
     }
-}
-
-function handleVoteSelection(e) {
-    document.querySelectorAll('.vote-option').forEach(opt => opt.classList.remove('selected-vote'));
-    e.target.classList.add('selected-vote');
-}
-
-function handleGuessSelection(e) {
-    document.querySelectorAll('.word-cell.guessable').forEach(cell => cell.classList.remove('selected-guess'));
-    e.target.classList.add('selected-guess');
-}
-
-function displayScoringSummary(outcomeKey, results, changes) {
-    const outcomeTitles = {
-        "fox-win": "🦊 Foxes Win!",
-        "rabbit-win": "🐰 Rabbit Wins!",
-        "contested-win": "🤝 Push - Both Sides Win!",
-        "total-failure": "💥 Total Failure!"
-    };
-
-    const outcomeDescriptions = {
-        "fox-win": "The Foxes caught the Rabbit, and the Rabbit failed to guess the word. <strong>Foxes win 2× their catch bets!</strong>",
-        "rabbit-win": "The Rabbit escaped detection and guessed the secret word! <strong>The Rabbit wins 3× their guess bet!</strong>",
-        "contested-win": "The Foxes caught the Rabbit, but the Rabbit ALSO guessed the word correctly. <strong>Everyone pushes and gets back their original bet (1×).</strong>",
-        "total-failure": "The Foxes failed to catch the Rabbit, AND the Rabbit failed to guess the word. <strong>Everyone loses their bets!</strong>"
-    };
-
-    // Generate outcome images
-    const outcomeImages = {
-        "fox-win": `<div class="outcome-image"><img src="assets/bunnycatch.png" alt="Bunny Caught"></div>`,
-        "rabbit-win": `<div class="outcome-image"><img src="assets/bunnyrun.png" alt="Bunny Escaped"></div>`,
-        "contested-win": `<div class="outcome-image"><img src="assets/bunnyfoxwin.png" alt="Both Sides Win"></div>`,
-        "total-failure": `<div class="outcome-image"><img src="assets/bunnyfoxlose.png" alt="Both Sides Lose"></div>`
-    };
-
-    // Generate score changes
-    const scoreChanges = changes.map(c => {
-        const change = Math.round(c.change * 100) / 100;
-        const changeClass = change > 0 ? 'gain' : (change < 0 ? 'loss' : 'neutral');
-        const sign = change > 0 ? '+' : '';
-        return `
-            <li>
-                <span class="player-name">${c.name}</span>
-                <div class="score-change-details">
-                    <span class="score-change ${changeClass}">${sign}${change} 🥕</span>
-                    <span class="score-transition">${Math.round(c.oldScore)} → ${Math.round(c.oldScore + change)}</span>
-                </div>
-            </li>
-        `;
-    }).join('');
-
-    const rabbit = gameState.players[gameState.rabbitIndex];
     
-    gameInfo.scoringSummary.innerHTML = `
-        <div class="scoring-header">
-            <div class="outcome-banner ${outcomeKey}">${outcomeTitles[outcomeKey]}</div>
-            ${outcomeImages[outcomeKey] || ''}
-        </div>
+    // Initial display
+    updateRevealTimerDisplay();
+    
+    // Start countdown
+    revealTimerInterval = setInterval(() => {
+        revealTimerSeconds--;
+        updateRevealTimerDisplay();
         
-        <div class="round-summary">
-            <h3>Round Summary</h3>
-            <div class="summary-grid">
-                <div class="summary-item">
-                    <h4>Secret Word</h4>
-                    <div class="value">${gameState.secretWord}</div>
-                </div>
-                <div class="summary-item">
-                    <h4>The Rabbit</h4>
-                    <div class="value">${rabbit.name}</div>
-                </div>
-                <div class="summary-item">
-                    <h4>Catch Attempt</h4>
-                    <div class="result ${results.catchSuccess ? 'success' : 'failure'}">
-                        ${results.catchSuccess ? 'SUCCESS' : 'FAILURE'}
-                    </div>
-                </div>
-                <div class="summary-item">
-                    <h4>Rabbit's Guess</h4>
-                    <div class="result ${results.guessSuccess ? 'success' : 'failure'}">
-                        ${results.guessSuccess ? 'SUCCESS' : 'FAILURE'}
-                    </div>
-                    <div class="value">"${gameState.rabbitGuess || 'No Guess Made'}"</div>
-                </div>
-            </div>
-            <div class="outcome-description">
-                ${outcomeDescriptions[outcomeKey]}
-            </div>
-        </div>
-        
-        <div class="score-changes-section">
-            <h3>Score Changes</h3>
-            <ul id="player-score-changes">
-                ${scoreChanges}
-            </ul>
-        </div>
-    `;
-}
-
-function showTiebreakerScreen(tiedPlayers) {
-    // Calculate vote counts for display
-    const voteCounts = {};
-    gameState.players.forEach(p => {
-        if (p.vote !== null) {
-            voteCounts[p.vote] = (voteCounts[p.vote] || 0) + 1;
+        if (revealTimerSeconds <= 0) {
+            clearInterval(revealTimerInterval);
+            revealTimerInterval = null;
+            
+            // Enable button and hide timer
+            revealButton.disabled = false;
+            revealButton.classList.remove('disabled-with-timer');
+            revealButton.innerHTML = `I've Got It!`;
+            timerContainer.classList.remove('active');
         }
-    });
-    
-    let html = `
-        <div class="tiebreaker-screen">
-            <div style="text-align: center; margin-bottom: var(--spacing-xl);">
-                <div style="font-size: 48px; margin-bottom: var(--spacing-md);">🪨📄✂️</div>
-                <h2 style="color: var(--warning-color); margin-bottom: var(--spacing-lg);">Tiebreaker Required!</h2>
-            </div>
-            
-            <div style="background: var(--background-tertiary); border-radius: var(--border-radius-lg); padding: var(--spacing-xl); margin-bottom: var(--spacing-xl); border: 1px solid var(--border-light);">
-                <p style="text-align: center; margin-bottom: var(--spacing-md); font-size: 16px;">The following players are tied with <strong>${voteCounts[tiedPlayers[0]]}</strong> vote${voteCounts[tiedPlayers[0]] !== 1 ? 's' : ''} each:</p>
-                <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: var(--spacing-md); justify-content: center;">
-                    ${tiedPlayers.map(index => 
-                        `<li style="background: var(--primary-color); color: var(--text-on-primary); padding: var(--spacing-sm) var(--spacing-md); border-radius: var(--border-radius-md); font-weight: 600;">${gameState.players[index].name}</li>`
-                    ).join('')}
-                </ul>
-            </div>
-            
-            <div style="text-align: center; margin-bottom: var(--spacing-xl);">
-                <p style="font-size: 18px; font-weight: 600; margin-bottom: var(--spacing-sm);">🎲 Resolution Required</p>
-                <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">These players should play <strong>Rock-Paper-Scissors</strong> outside the game to determine who gets accused.</p>
-                <p style="font-weight: 600; color: var(--text-primary);">Click the <strong>loser</strong> below:</p>
-            </div>
-            
-            <div class="tiebreaker-buttons" style="display: grid; gap: var(--spacing-md); max-width: 400px; margin: 0 auto;">
-                ${tiedPlayers.map(index => 
-                    `<button onclick="selectTiebreakerWinner(${index})" class="tiebreaker-btn" style="background: var(--accent-color); color: var(--text-on-color); border: none; padding: var(--spacing-lg); border-radius: var(--border-radius-md); font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s ease;">
-                        😞 ${gameState.players[index].name} Lost RPS
-                    </button>`
-                ).join('')}
-            </div>
-        </div>
-    `;
-    
-    gameInfo.voteResultsContent.innerHTML = html;
+    }, 1000);
 }
 
-function selectTiebreakerWinner(winnerIndex) {
-    gameState.accusedIndex = winnerIndex;
+function stopRevealTimer() {
+    if (revealTimerInterval) {
+        clearInterval(revealTimerInterval);
+        revealTimerInterval = null;
+    }
+    const timerContainer = document.getElementById('reveal-timer-container');
+    const revealButton = gameInfo.roleRevealedBtn;
     
-    // Show the tiebreaker result and then proceed to normal vote results display
-    let resultsHTML = '';
-    
-    resultsHTML += `<div style="text-align: center; margin-bottom: var(--spacing-xl);">`;
-    resultsHTML += `<div style="background: var(--accent-color); color: var(--text-on-primary); padding: var(--spacing-xl); border-radius: var(--border-radius-lg); margin-bottom: var(--spacing-lg);">`;
-    resultsHTML += `<div style="font-size: 24px; margin-bottom: var(--spacing-sm);">🎲</div>`;
-    resultsHTML += `<h3 style="font-size: 18px; font-weight: 700; margin-bottom: var(--spacing-xs);">Tiebreaker Resolved!</h3>`;
-    resultsHTML += `<p style="opacity: 0.9;">${gameState.players[winnerIndex].name} lost Rock-Paper-Scissors</p>`;
-    resultsHTML += `</div>`;
-    resultsHTML += `</div>`;
-    
-    resultsHTML += `<div style="background: var(--primary-color); color: var(--text-on-primary); padding: var(--spacing-xl); border-radius: var(--border-radius-lg); text-align: center; margin-bottom: var(--spacing-xl); box-shadow: var(--shadow-medium);">`;
-    resultsHTML += `<h3 style="margin-bottom: var(--spacing-sm); font-size: 20px; color: var(--text-on-primary);">🎯 The Pack's Final Verdict</h3>`;
-    resultsHTML += `<p style="font-size: 18px; font-weight: 600;">${gameState.players[winnerIndex].name}</p>`;
-    resultsHTML += `<p style="font-size: 14px; opacity: 0.9; margin-top: var(--spacing-xs);">Accused after losing the tiebreaker</p>`;
-    resultsHTML += `</div>`;
-    
-    resultsHTML += `<div style="text-align: center; padding: var(--spacing-lg); background: var(--background-secondary); border-radius: var(--border-radius-md); border: 1px solid var(--border-light);">`;
-    resultsHTML += `<p style="color: var(--text-secondary); font-size: 14px; font-style: italic;">`;
-    resultsHTML += `The foxes have made their choice through fair competition. But was their hunt successful?`;
-    resultsHTML += `</p>`;
-    resultsHTML += `</div>`;
-    
-    gameInfo.voteResultsContent.innerHTML = resultsHTML;
+    timerContainer.classList.remove('active');
+    revealButton.disabled = false;
+    revealButton.classList.remove('disabled-with-timer');
+    revealButton.innerHTML = `I've Got It!`;
 }
 
 // --- EVENT LISTENERS ---
@@ -1088,6 +880,7 @@ gameInfo.showRoleBtn.addEventListener('click', () => {
 });
 
 gameInfo.roleRevealedBtn.addEventListener('click', () => {
+    stopRevealTimer(); // Clean up reveal timer
     screens.reveal.classList.remove('active');
     nextPlayer();
 });
