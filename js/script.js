@@ -731,16 +731,47 @@ function updateUI() {
 function showRevealScreen() {
     switchScreen('game');
     screens.reveal.classList.add('active');
-    
     const player = gameState.players[gameState.currentPlayerIndex];
     gameInfo.revealRoleTitle.textContent = player.isRabbit ? "You are the RABBIT 🐰" : "You are a FOX 🦊";
     gameInfo.revealInstruction.textContent = player.isRabbit 
         ? "You DON'T know the secret word. Blend in and try to figure it out from the clues!"
         : "Your pack's secret word is highlighted below. Give clues to help your fellow Foxes find the Rabbit without giving the word away!";
-    
     gameInfo.revealWordGrid.innerHTML = gameState.wordGrid.map(word => 
         `<div class="word-cell ${!player.isRabbit && word === gameState.secretWord ? 'secret' : ''}">${word}</div>`
     ).join('');
+
+    // --- TIMER FOR EACH PLAYER IN REVEAL PHASE ---
+    if (gameState.phase === 'reveal') {
+        if (gameInfo.roleRevealedBtn) {
+            gameInfo.roleRevealedBtn.disabled = true;
+            let timerDisplay = document.getElementById('reveal-timer');
+            if (!timerDisplay) {
+                timerDisplay = document.createElement('div');
+                timerDisplay.id = 'reveal-timer';
+                timerDisplay.style.fontSize = '20px';
+                timerDisplay.style.fontWeight = 'bold';
+                timerDisplay.style.margin = '16px 0';
+                gameInfo.revealInstruction.parentNode.insertBefore(timerDisplay, gameInfo.revealInstruction.nextSibling);
+            }
+            let secondsLeft = 10;
+            timerDisplay.textContent = `Read the clues... (${secondsLeft}s)`;
+            timerInterval = setInterval(() => {
+                secondsLeft--;
+                timerDisplay.textContent = `Read the clues... (${secondsLeft}s)`;
+                if (secondsLeft <= 0) {
+                    clearInterval(timerInterval);
+                    timerDisplay.textContent = '';
+                    gameInfo.roleRevealedBtn.disabled = false;
+                }
+            }, 1000);
+        }
+    } else {
+        if (gameInfo.roleRevealedBtn) {
+            gameInfo.roleRevealedBtn.disabled = false;
+        }
+        let timerDisplay = document.getElementById('reveal-timer');
+        if (timerDisplay) timerDisplay.textContent = '';
+    }
 }
 
 function setupMainPhaseScreen() {
