@@ -1757,3 +1757,10 @@ label {
     margin: 0;
     line-height: 1.4;
 }
+
+.greyed-out {
+    opacity: 0.5;
+    pointer-events: none;
+    filter: grayscale(1);
+    cursor: not-allowed !important;
+}

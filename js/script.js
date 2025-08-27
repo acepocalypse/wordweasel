@@ -63,7 +63,6 @@ const WORD_LISTS = {
     "Entertainment & Media": ["Film", "Cinema", "Podcast", "Sitcom", "Standup", "Musical", "Trailer", "Binge", "Sequel", "Animated", "Director", "Soundtrack", "Ratings", "Episode", "Premiere", "Documentary", "Studio", "Karaoke"],
     "Nature & Science": ["Volcano", "Coral", "Meteor", "Gravity", "Photosynthesis", "Galaxy", "Fungus", "Tornado", "Magnetism", "Oasis", "Condensation", "Eclipse", "Glacier", "Neuron", "Plateau", "Mangrove", "Chlorophyll", "Fossil"],
     "Sports & Activities": ["Cycling", "Archery", "Skateboard", "Marathon", "Curling", "Gymnastics", "Kayaking", "Yoga", "Climbing", "Darts", "Surfing", "Triathlon", "Boxing", "Pilates", "Fencing", "Baseball", "Soccer", "Cricket"],
-    "History & Culture": ["Renaissance", "Dynasty", "Monarch", "Colosseum", "Architecture", "Pharaoh", "Treaty", "Revolution", "Folklore", "Mythology", "Expedition", "Artifact", "Empire", "Constitution", "Siege", "Pilgrimage", "Heritage", "Tradition"],
     "Technology & Modern Life": ["Encryption", "Algorithm", "Blockchain", "Drone", "Smartphone", "Cloud", "App", "Wearable", "Bandwidth", "Router", "WiFi", "Virtual Reality", "Cookie", "Firmware", "Hashtag", "Biometric", "Autopilot", "Nanobot"],
     "Travel & Geography": ["Archipelago", "Peninsula", "Savannah", "Harbor", "Highway", "Canyon", "Desert", "Lagoon", "Capital", "Route", "Tourist", "Cruise", "Backpacking", "Passport", "Itinerary", "Baggage", "Monument", "Border"],
     "Arts & Creative": ["Watercolor", "Sculpture", "Mosaic", "Graffiti", "Collage", "Origami", "Improv", "Chorus", "Sonnet", "Abstract", "Portrait", "Gallery", "Easel", "Stencil", "Ballet", "Opera", "Clay", "Drama"],
@@ -749,6 +748,7 @@ function showRevealScreen() {
     if (gameState.phase === 'reveal') {
         if (gameInfo.roleRevealedBtn) {
             gameInfo.roleRevealedBtn.disabled = true;
+            gameInfo.roleRevealedBtn.classList.add('greyed-out');
             let timerDisplay = document.getElementById('reveal-timer');
             if (!timerDisplay) {
                 timerDisplay = document.createElement('div');
@@ -767,12 +767,14 @@ function showRevealScreen() {
                     clearInterval(timerInterval);
                     timerDisplay.textContent = '';
                     gameInfo.roleRevealedBtn.disabled = false;
+                    gameInfo.roleRevealedBtn.classList.remove('greyed-out');
                 }
             }, 1000);
         }
     } else {
         if (gameInfo.roleRevealedBtn) {
             gameInfo.roleRevealedBtn.disabled = false;
+            gameInfo.roleRevealedBtn.classList.remove('greyed-out');
         }
         let timerDisplay = document.getElementById('reveal-timer');
         if (timerDisplay) timerDisplay.textContent = '';
